@@ -43,7 +43,7 @@ export const GameVibrate = ({
           <div className="text-[80px] font-bold text-green-500 animate-bounce">PERFECT!</div>
         )}
         {signal === 'good' && (
-          <div className="text-[80px] font-bold text-yellow-500 animate-bounce">GOOD!</div>
+          <div className="text-[80px]4 font-bold text-yellow-500 animate-bounce">GOOD!</div>
         )}
       </div>
       <div className="flex flex-col gap-3 text-center">

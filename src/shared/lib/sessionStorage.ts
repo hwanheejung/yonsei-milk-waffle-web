@@ -30,3 +30,7 @@ export const getStorage = ({
   }
   return null;
 };
+
+export const clearStorage = () => {
+  sessionStorage.clearStorage();
+};

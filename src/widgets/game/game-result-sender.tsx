@@ -3,6 +3,7 @@ import type { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 import { setStorage } from '@/shared/lib/sessionStorage';
 import { useNavigate } from '@tanstack/react-router';
+import { clearStorage } from '@/shared/lib/sessionStorage';
 
 export const GameResultSender = ({
   userBeatList,
@@ -24,6 +25,7 @@ export const GameResultSender = ({
         team: localStorage.getItem('team') as Team,
       },
     }).then(() => {});
+    clearStorage(); // 뒤로가기 방지
     navigate({ to: '/result' });
   };
 
