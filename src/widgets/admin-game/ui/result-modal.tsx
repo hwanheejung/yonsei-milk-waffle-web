@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCounter } from '../hooks/use-result';
 
 type TeamScore = {
   team: string;
@@ -18,35 +19,55 @@ const dummyData: ResultData = {
   ],
 };
 
-// 숫자 카운터 애니메이션을 위한 커스텀 훅
-const useCounter = (target: number, duration = 1000) => {
-  const [count, setCount] = useState(0);
+const Countdown = () => {
+  const [count, setCount] = useState(5);
 
   useEffect(() => {
-    let startTime: number;
-    let animationFrame: number;
+    const timer = setInterval(() => {
+      setCount((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-    const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
+    return () => clearInterval(timer);
+  }, []);
 
-      setCount(Math.floor(progress * target));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => cancelAnimationFrame(animationFrame);
-  }, [target, duration]);
-
-  return count;
+  return (
+    <div className="flex flex-col items-center justify-center h-full">
+      <span className="text-8xl font-extrabold text-white mb-8">{count}</span>
+    </div>
+  );
 };
 
 const ResultModal = () => {
   const [resultData] = useState<ResultData>(dummyData);
+  const [showResult, setShowResult] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowResult(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="flex flex-col justify-between p-8 w-full h-[60%] text-center bg-[url('/images/result-background.png')] bg-cover bg-center">
+        <h2 className="text-2xl font-bold mb-10 text-white">게임 종료!</h2>
+        {showResult ? <ResultGraph resultData={resultData} /> : <Countdown />}
+      </div>
+    </div>
+  );
+};
+
+export { ResultModal };
+
+const ResultGraph = ({ resultData }: { resultData: ResultData }) => {
   const [currentLevel, setCurrentLevel] = useState(-1);
   const maxScore = Math.max(...resultData.scores.map((s) => s.score));
 
@@ -85,33 +106,26 @@ const ResultModal = () => {
   }, [scoreLevels.length]);
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="flex flex-col justify-between p-8 w-full h-[60%] text-center bg-[url('/images/result-background.png')] bg-cover bg-center">
-        <h2 className="text-2xl font-bold mb-10 text-white">게임 종료!</h2>
-        <div className="flex justify-center items-end gap-8 h-[300px] mb-10">
-          {resultData.scores.map((teamScore, index) => {
-            const currentMaxScore = scoreLevels[currentLevel];
-            const displayScore = Math.min(teamScore.score, currentMaxScore);
-            const height = (displayScore / maxScore) * 250;
-            const animatedScore = [seoulCounter, koreaCounter, yonseiCounter, kaistCounter][index];
+    <div className="flex justify-center items-end gap-8 h-[300px] mb-10">
+      {resultData.scores.map((teamScore, index) => {
+        const currentMaxScore = scoreLevels[currentLevel];
+        const displayScore = Math.min(teamScore.score, currentMaxScore);
+        const height = (displayScore / maxScore) * 250;
+        const animatedScore = [seoulCounter, koreaCounter, yonseiCounter, kaistCounter][index];
 
-            return (
-              <div key={teamScore.team} className="flex flex-col items-center">
-                <div
-                  className="w-16 bg-blue-500 rounded-t-lg transition-all duration-1000 ease-out"
-                  style={{
-                    height: `${height}px`,
-                  }}
-                />
-                <span className="mt-2 text-lg font-bold text-white">{teamScore.team}</span>
-                <span className="text-2xl text-white">{animatedScore}점</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+        return (
+          <div key={teamScore.team} className="flex flex-col items-center">
+            <div
+              className="w-16 bg-blue-500 rounded-t-lg transition-all duration-1000 ease-out"
+              style={{
+                height: `${height}px`,
+              }}
+            />
+            <span className="mt-2 text-lg font-bold text-white">{teamScore.team}</span>
+            <span className="text-2xl text-white">{animatedScore}점</span>
+          </div>
+        );
+      })}
     </div>
   );
 };
-
-export { ResultModal };
