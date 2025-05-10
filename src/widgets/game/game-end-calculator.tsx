@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { calculateGameEndTime } from '@/feature/game/game-time-calculator';
 import { API_BASE_URL } from '@/shared/constants/env';
+import { calculateGameEndTime } from '@/feature/game/game-time-calculator';
+import { useEffect } from 'react';
 
 export const GameEndCalculator = ({
   setGameEndTime,

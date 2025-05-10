@@ -23,7 +23,7 @@ const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
     const timeInCurrentBeat = currentTime - prevBeat;
     const progress = timeInCurrentBeat / beatInterval;
 
-    const maxAngle = 30;
+    const maxAngle = 50;
     const angle = progress * maxAngle;
     return angle;
   };
@@ -36,8 +36,7 @@ const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
           className={cn(
             'absolute left-[calc(50%-15px)] top-0 h-24 w-3 -translate-x-1/2 origin-bottom transition-transform duration-100 rounded-xl',
             'bg-gradient-to-b from-blue-400 to-blue-600',
-            'shadow-[0_0_10px_rgba(59,130,246,0.5)]',
-            !isPlaying && 'opacity-50'
+            'shadow-[0_0_2px_rgba(59,130,246,0.5),0_0_4px_rgba(59,130,246,0.5),0_0_8px_rgba(59,130,246,0.5),0_0_12px_rgba(59,130,246,0.5),0_0_16px_rgba(59,130,246,0.5)]'
           )}
           style={{
             transform: `rotate(${getSwingAngle()}deg)`,
@@ -48,8 +47,7 @@ const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
           className={cn(
             'absolute left-[calc(50%+15px)] top-0 h-24 w-3 -translate-x-1/2 origin-bottom transition-transform duration-100 rounded-xl',
             'bg-gradient-to-b from-pink-400 to-pink-600',
-            'shadow-[0_0_10px_rgba(236,72,153,0.5)]',
-            !isPlaying && 'opacity-50'
+            'shadow-[0_0_2px_rgba(236,72,153,0.5),0_0_4px_rgba(236,72,153,0.5),0_0_8px_rgba(236,72,153,0.5),0_0_12px_rgba(236,72,153,0.5),0_0_16px_rgba(236,72,153,0.5)]'
           )}
           style={{
             transform: `rotate(${getSwingAngle()}deg)`,

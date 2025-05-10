@@ -4,9 +4,5 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 function RootComponent() {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 }
