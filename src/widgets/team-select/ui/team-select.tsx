@@ -1,4 +1,4 @@
-import { TEAM_INFO, Team, useSelectTeamMutation } from '@/entities/team';
+import { TEAM_INFO, Team } from '@/entities/team';
 import { cn } from '@/shared/lib/utils';
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui';
 import { useRouter } from '@tanstack/react-router';
@@ -6,22 +6,12 @@ import { useState } from 'react';
 
 const TeamSelectForm = () => {
   const [selectedTeam, setSelectedTeam] = useState<Team>(Team.SEOUL);
-  const { mutate: selectTeam, isPending } = useSelectTeamMutation();
 
   const router = useRouter();
 
   const handleConfirm = () => {
-    selectTeam(
-      { team: selectedTeam },
-      {
-        onSuccess: () => {
-          router.navigate({ to: '/game' });
-        },
-        onError: (error) => {
-          console.error('Failed to select team:', error);
-        },
-      }
-    );
+    localStorage.setItem('team', selectedTeam);
+    router.navigate({ to: '/game' });
   };
 
   return (
@@ -42,8 +32,8 @@ const TeamSelectForm = () => {
         ))}
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Button variant="default" disabled={isPending} onClick={handleConfirm}>
-          {isPending ? '선택 중...' : '시작하기!'}
+        <Button variant="default" onClick={handleConfirm}>
+          시작하기!
         </Button>
       </CardFooter>
     </Card>
