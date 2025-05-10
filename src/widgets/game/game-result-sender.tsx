@@ -31,6 +31,7 @@ export const GameResultSender = ({
 
       if (!hasSentResult.current && now > gameEndTime) {
         setStorage({ key: 'BEAT_LIST', value: userBeatHistory });
+        setError('test');
 
         sendGameResult({
           body: { timestamp: userBeatList, team: Team.KOREA },
