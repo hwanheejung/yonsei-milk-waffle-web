@@ -1,9 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router';
+import MotionCheck from '@/feature/game/zyro-calculator';
+import { Game } from '@/widget/game/game';
 
 export const Route = createFileRoute('/game')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>게임 진행되는 페이지 (클릭 or 흔들기)</div>;
+  return (
+    <div className="min-h-screen background-white-100">
+      <div className="flex flex-col items-center">
+        <h1 className="">게임 로직 테스트</h1>
+        <Game />
+        <MotionCheck />
+      </div>
+    </div>
+  );
 }
