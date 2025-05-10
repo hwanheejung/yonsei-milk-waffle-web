@@ -1,6 +1,6 @@
 import type { Timestamp } from '@/entities/time/Timestamp';
 import { getUpdatedTimstamp } from '@/feature/game/beat-calculator';
-import { useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 interface DeviceMotionEventConstructor {
   new (type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
@@ -21,6 +21,7 @@ export const GameMotionCheck = ({
   userBeatList: Timestamp[];
   setUserBeatList: (input: Timestamp[]) => void;
 }) => {
+  const [countNumber, setCountNumber] = useState(0);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
@@ -47,6 +48,7 @@ export const GameMotionCheck = ({
         if (!last || currentTime - last > 200) {
           userMovements.current.push(currentTime);
           setUserBeatList(getUpdatedTimstamp({ userBeatList }));
+          setCountNumber((prev) => prev + 1);
           isIgnore.current = true;
         }
       }
@@ -98,6 +100,7 @@ export const GameMotionCheck = ({
       <p className="text-lg mb-2">측정 중입니다...</p>
       <p className="text-sm text-gray-600">폰을 좌우로 흔들어보세요!</p>
       <div className="mt-4 flex flex-col gap-2">
+        <div>{countNumber} 회</div>
         {userBeatList.map((item) => (
           <div key={`game-${item}`}>{item}</div>
         ))}
