@@ -28,7 +28,8 @@ const AdminGameContent = () => {
 
   const handleStartGame = async () => {
     if (!audioRef.current || !beatData) return;
-    await startGame({ game_started_at: Date.now() });
+    const response = await startGame({ game_started_at: Date.now() });
+    console.log(response);
     startTimeRef.current = Date.now();
     audioRef.current.play();
     setIsPlaying(true);
