@@ -1,4 +1,13 @@
 import { useState, useRef } from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface DeviceMotionEventConstructor {
   new (type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
@@ -9,6 +18,7 @@ interface DeviceMotionEventConstructor {
 export default function MotionCheck() {
   const [status, setStatus] = useState<'WAITING' | 'PLAYING' | 'COMPLETE'>('WAITING');
   const [movementCount, setMovementCount] = useState(0);
+  const [graphData, setGraphData] = useState<{ time: number; x: number }[]>([]);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
 
@@ -63,6 +73,11 @@ export default function MotionCheck() {
     if (!acceleration || startTime.current === null) return;
 
     const currentTime = Date.now() - startTime.current;
+    const x = acceleration.x ?? 0;
+
+    // 그래프 데이터에 추가
+    setGraphData((prev) => [...prev, { time: currentTime, x }]);
+
     const threshold = 10;
 
     if (Math.abs(acceleration.x ?? 0) > threshold) {
@@ -111,6 +126,17 @@ export default function MotionCheck() {
         <>
           <p className="text-lg mb-2">측정이 COMPLETE되었습니다!</p>
           <p className="text-xl font-bold text-blue-600">총 {movementCount}회 흔들림 감지됨</p>
+          <div className="w-full h-64 mt-6">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={graphData}>
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="time" unit="ms" />
+                <YAxis domain={['auto', 'auto']} />
+                <Tooltip />
+                <Line type="monotone" dataKey="x" stroke="#ff7300" dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
           <button
             type="button"
             onClick={reset}
