@@ -34,25 +34,55 @@ const AdminGameContent = () => {
   const remainingTime = Math.max(0, Math.floor(beatData.song_length - currentTime));
   const remainingTimeStr = String(remainingTime).padStart(2, '0');
 
-  // 게임 시작 신호가 오면 오디오 재생 및 타이머 시작
+  // // 게임 시작 신호가 오면 오디오 재생 및 타이머 시작
+  // useEffect(() => {
+  //   if (!gameStarted || !audioRef.current || !startTime || !beatData) return;
+  //   audioRef.current.currentTime = 0;
+  //   audioRef.current.play();
+  //   setIsPlaying(true);
+  //   const interval = setInterval(() => {
+  //     const now = (Date.now() - startTime) / 1000;
+  //     setCurrentTime(now);
+  //     if (now >= beatData.song_length) {
+  //       audioRef.current?.pause();
+  //       setIsPlaying(false);
+  //       setCurrentTime(0);
+  //       resetGame();
+  //       setShowResult(true);
+  //     }
+  //   }, 100);
+  //   return () => clearInterval(interval);
+  // }, [gameStarted, startTime, beatData, setIsPlaying, setCurrentTime, resetGame]);
+
+  // setInterval 대신 requestAnimationFrame 사용
   useEffect(() => {
-    if (!gameStarted || !audioRef.current || !startTime || !beatData) return;
+    if (!gameStarted || !audioRef.current || !beatData) return;
+
     audioRef.current.currentTime = 0;
-    audioRef.current.play();
-    setIsPlaying(true);
-    const interval = setInterval(() => {
-      const now = (Date.now() - startTime) / 1000;
-      setCurrentTime(now);
-      if (now >= beatData.song_length) {
-        audioRef.current?.pause();
-        setIsPlaying(false);
-        setCurrentTime(0);
-        resetGame();
-        setShowResult(true);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [gameStarted, startTime, beatData, setIsPlaying, setCurrentTime, resetGame]);
+    audioRef.current.play().then(() => {
+      setIsPlaying(true);
+      let animationFrameId: number;
+
+      const tick = () => {
+        const now = audioRef.current?.currentTime ?? 0;
+        setCurrentTime(now);
+
+        if (now >= beatData.song_length) {
+          audioRef.current?.pause();
+          setIsPlaying(false);
+          setCurrentTime(0);
+          resetGame();
+          setShowResult(true);
+          return;
+        }
+
+        animationFrameId = requestAnimationFrame(tick);
+      };
+
+      animationFrameId = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(animationFrameId);
+    });
+  }, [gameStarted, beatData, resetGame, setIsPlaying, setCurrentTime]);
 
   return (
     <>
