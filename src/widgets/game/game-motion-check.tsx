@@ -1,4 +1,3 @@
-import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
@@ -25,14 +24,11 @@ const isDeviceMotionEventWithPermission = (
 };
 
 export const GameMotionCheck = ({
-  userBeatList,
   setUserBeatList,
 }: {
-  userBeatList: Timestamp[];
   setUserBeatList: Dispatch<React.SetStateAction<number[]>>;
 }) => {
   const [countNumber, setCountNumber] = useState(0);
-  const [number, setNumber] = useState(0);
   const [graphData, setGraphData] = useState<{ time: number; x: number }[]>([]);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
@@ -112,19 +108,7 @@ export const GameMotionCheck = ({
       <p className="text-sm text-gray-600">폰을 좌우로 흔들어보세요!</p>
       <div className="mt-4 flex flex-col gap-2">
         <div>{countNumber} 회</div>
-        {userBeatList.map((item) => (
-          <div key={`game-${item}`}>{item}</div>
-        ))}
       </div>
-      <div>{number}</div>
-      <button
-        type="button"
-        onClick={() => {
-          setNumber((prev) => prev + 1);
-        }}
-      >
-        클릭해요
-      </button>
       <div className="w-full h-64 mt-6">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={graphData}>

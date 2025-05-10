@@ -2,7 +2,7 @@ import { usePostGameMutation } from '@/entities/game/api/mutations';
 import { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const GameResultSender = ({
   gameEndTime,
@@ -11,8 +11,6 @@ export const GameResultSender = ({
   gameEndTime: number | null;
   userBeatList: Timestamp[];
 }) => {
-  const [error, setError] = useState('');
-  const [check, setChecked] = useState(false);
   const { mutateAsync: sendGameResult } = usePostGameMutation();
   const hasSentResult = useRef(false);
 
@@ -23,18 +21,11 @@ export const GameResultSender = ({
 
     const interval = setInterval(() => {
       const now = getCurrentUnixTime();
-      setChecked(!hasSentResult.current && now > gameEndTime);
       console.log(!hasSentResult.current && now > gameEndTime);
       if (!hasSentResult.current && now > gameEndTime) {
         sendGameResult({
           body: { timestamp: userBeatList, team: Team.KOREA },
-        })
-          .then(() => {
-            setError('submitted');
-          })
-          .catch((err) => {
-            setError(err);
-          });
+        });
         hasSentResult.current = true;
         clearInterval(interval);
       }
@@ -43,10 +34,5 @@ export const GameResultSender = ({
     return () => clearInterval(interval);
   }, [gameEndTime, userBeatList, sendGameResult]);
 
-  return (
-    <div>
-      {check}
-      {error.trim().length !== 0 ? <div>Game Result: {error}</div> : null}
-    </div>
-  );
+  return null;
 };

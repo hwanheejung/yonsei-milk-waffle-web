@@ -13,7 +13,7 @@ export const Game = () => {
       <div>{gameEndTime}</div>
       <GameEndCalculator setGameEndTime={setGameEndTime} />
       <GameResultSender gameEndTime={gameEndTime} userBeatList={userBeatList} />
-      <GameMotionCheck userBeatList={userBeatList} setUserBeatList={setUserBeatList} />
+      <GameMotionCheck setUserBeatList={setUserBeatList} />
     </>
   );
 };
