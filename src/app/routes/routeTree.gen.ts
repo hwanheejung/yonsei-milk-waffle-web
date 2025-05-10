@@ -10,20 +10,20 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./../../pages/__root";
-import { Route as SelectTeamImport } from "./../../pages/select-team";
-import { Route as GameImport } from "./../../pages/game";
-import { Route as AdminImport } from "./../../pages/admin";
-import { Route as IndexImport } from "./../../pages/index";
-
+import { Route as rootRoute } from './../../pages/__root'
+import { Route as SelectTeamImport } from './../../pages/select-team'
+import { Route as ResultImport } from './../../pages/result'
+import { Route as GameImport } from './../../pages/game'
+import { Route as AdminImport } from './../../pages/admin'
+import { Route as IndexImport } from './../../pages/index'
 
 // Create/Update Routes
 
 const SelectTeamRoute = SelectTeamImport.update({
-  id: "/select-team",
-  path: "/select-team",
+  id: '/select-team',
+  path: '/select-team',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const ResultRoute = ResultImport.update({
   id: '/result',
@@ -32,96 +32,107 @@ const ResultRoute = ResultImport.update({
 } as any)
 
 const GameRoute = GameImport.update({
-  id: "/game",
-  path: "/game",
+  id: '/game',
+  path: '/game',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AdminRoute = AdminImport.update({
-  id: "/admin",
-  path: "/admin",
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/admin": {
-      id: "/admin";
-      path: "/admin";
-      fullPath: "/admin";
-      preLoaderRoute: typeof AdminImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/game": {
-      id: "/game";
-      path: "/game";
-      fullPath: "/game";
-      preLoaderRoute: typeof GameImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/select-team": {
-      id: "/select-team";
-      path: "/select-team";
-      fullPath: "/select-team";
-      preLoaderRoute: typeof SelectTeamImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameImport
+      parentRoute: typeof rootRoute
+    }
+    '/result': {
+      id: '/result'
+      path: '/result'
+      fullPath: '/result'
+      preLoaderRoute: typeof ResultImport
+      parentRoute: typeof rootRoute
+    }
+    '/select-team': {
+      id: '/select-team'
+      path: '/select-team'
+      fullPath: '/select-team'
+      preLoaderRoute: typeof SelectTeamImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/admin": typeof AdminRoute;
-  "/game": typeof GameRoute;
-  "/select-team": typeof SelectTeamRoute;
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/game': typeof GameRoute
+  '/result': typeof ResultRoute
+  '/select-team': typeof SelectTeamRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/admin": typeof AdminRoute;
-  "/game": typeof GameRoute;
-  "/select-team": typeof SelectTeamRoute;
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/game': typeof GameRoute
+  '/result': typeof ResultRoute
+  '/select-team': typeof SelectTeamRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexRoute;
-  "/admin": typeof AdminRoute;
-  "/game": typeof GameRoute;
-  "/select-team": typeof SelectTeamRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/game': typeof GameRoute
+  '/result': typeof ResultRoute
+  '/select-team': typeof SelectTeamRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/admin" | "/game" | "/select-team";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/admin" | "/game" | "/select-team";
-  id: "__root__" | "/" | "/admin" | "/game" | "/select-team";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/admin' | '/game' | '/result' | '/select-team'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/admin' | '/game' | '/result' | '/select-team'
+  id: '__root__' | '/' | '/admin' | '/game' | '/result' | '/select-team'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AdminRoute: typeof AdminRoute;
-  GameRoute: typeof GameRoute;
-  SelectTeamRoute: typeof SelectTeamRoute;
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  GameRoute: typeof GameRoute
+  ResultRoute: typeof ResultRoute
+  SelectTeamRoute: typeof SelectTeamRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -130,11 +141,11 @@ const rootRouteChildren: RootRouteChildren = {
   GameRoute: GameRoute,
   ResultRoute: ResultRoute,
   SelectTeamRoute: SelectTeamRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
