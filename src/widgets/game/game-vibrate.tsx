@@ -12,6 +12,8 @@ export const GameVibrate = ({
 
   const [signal, setSignal] = useState<'perfect' | 'good' | null>(null);
   const vibrateButtonRef = useRef<HTMLButtonElement>(null);
+  const goodVibrateButtonRef = useRef<HTMLButtonElement>(null);
+  const perfectVibrateButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isShacked || !resultBeatList?.length) return;
@@ -21,10 +23,10 @@ export const GameVibrate = ({
 
     if (minDiff <= PERFECT_THRESHOLD) {
       setSignal('perfect');
-      vibrateButtonRef.current?.click();
+      perfectVibrateButtonRef.current?.click();
     } else if (minDiff <= GOOD_THRESHOLD) {
       setSignal('good');
-      vibrateButtonRef.current?.click();
+      goodVibrateButtonRef.current?.click();
     }
 
     const timer = setTimeout(() => setSignal(null), 300);
@@ -41,8 +43,24 @@ export const GameVibrate = ({
           <div className="text-3xl font-bold text-yellow-500 animate-bounce">GOOD!</div>
         )}
       </div>
-      <button ref={vibrateButtonRef} type="button" onClick={() => navigator.vibrate(100)}>
-        진동 테스트
+      <button ref={vibrateButtonRef} type="button" onClick={() => navigator.vibrate(300)}>
+        진동 모드 켜기
+      </button>
+      <button
+        ref={goodVibrateButtonRef}
+        type="button"
+        onClick={() => navigator.vibrate(150)}
+        className="hidden"
+      >
+        GOOD 진동
+      </button>
+      <button
+        ref={perfectVibrateButtonRef}
+        type="button"
+        onClick={() => navigator.vibrate([300, 100, 300])}
+        className="hidden"
+      >
+        PERFECT 진동
       </button>
     </>
   );
