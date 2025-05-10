@@ -1,12 +1,13 @@
 import { API_BASE_URL } from '@/shared/constants/env';
 import { calculateGameEndTime } from '@/feature/game/game-time-calculator';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const GameEndCalculator = ({
   setGameEndTime,
 }: {
   setGameEndTime: (input: number | null) => void;
 }) => {
+  const [error, setError] = useState('');
   useEffect(() => {
     const eventSource = new EventSource(`${API_BASE_URL}api/game/status`);
     eventSource.onmessage = (event) => {
@@ -22,6 +23,7 @@ export const GameEndCalculator = ({
     eventSource.onerror = (error) => {
       console.error('SSE Error:', error);
       eventSource.close();
+      setError(error.type);
     };
 
     return () => {
@@ -29,5 +31,5 @@ export const GameEndCalculator = ({
     };
   }, [setGameEndTime]);
 
-  return null;
+  return error.trim().length !== 0 ? <div>{error}</div> : null;
 };
