@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/select-team')({
+export const Route = createFileRoute('/admin/result')({
   component: RouteComponent,
 });
+
 function RouteComponent() {
-  return <div>Hello "/select-team"!</div>;
+  return <div>게임 결과 페이지</div>;
 }
