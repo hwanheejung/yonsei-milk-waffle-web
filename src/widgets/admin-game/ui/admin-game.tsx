@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
+import { CheerleadingStick } from './cheerleading-stick';
 import { GameControls } from './game-controls';
-import { Metronome } from './metronome';
 
 type TBeatData = {
   song_length: number;
@@ -13,7 +13,7 @@ type TBeatData = {
 
 // Dummy data
 const dummyBeatData: TBeatData = {
-  song_length: 50,
+  song_length: 47,
   beat_list: [
     2.653, 4.606, 6.465, 6.832, 7.274, 7.733, 8.311, 9.269, 10.255, 11.55, 12.007, 13.957, 14.851,
     15.81, 16.789, 17.684, 19.638, 20.506, 21.441, 22.789, 23.25, 23.833, 24.705, 25.591, 26.542,
@@ -75,7 +75,11 @@ const AdminGame = () => {
 
       <BeatTrack currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
 
-      <Metronome currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
+      <CheerleadingStick
+        currentTime={currentTime}
+        beatList={beatData.beat_list}
+        isPlaying={isPlaying}
+      />
 
       <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
     </div>

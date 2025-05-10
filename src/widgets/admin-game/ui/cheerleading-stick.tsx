@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import { useEffect, useState } from 'react';
 
-const Metronome = ({ currentTime, beatList, isPlaying }: TProps) => {
+const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
   const [currentBeatIndex, setCurrentBeatIndex] = useState(0);
 
   // Find current beat
@@ -60,7 +60,7 @@ const Metronome = ({ currentTime, beatList, isPlaying }: TProps) => {
   );
 };
 
-export { Metronome };
+export { CheerleadingStick };
 
 type TProps = {
   currentTime: number;
