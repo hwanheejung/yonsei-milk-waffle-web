@@ -5,6 +5,7 @@ import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
 import { Characters } from './characters';
 import { ResultModal } from './result-modal';
+import { Button } from '@/shared/ui';
 
 const AdminGame = () => {
   return (
@@ -20,6 +21,7 @@ const AdminGameContent = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { data: beatData } = useGetGameSuspenseQuery();
   const [showResult, setShowResult] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
 
   // zustand
   const isPlaying = useGameStore((s) => s.isPlaying);
@@ -56,10 +58,16 @@ const AdminGameContent = () => {
 
   return (
     <>
-      {showResult && <ResultModal />}
+      {showResultModal && <ResultModal />}
+
       <header className="flex items-center justify-between bg-transparent px-14">
         <img src="/images/logo.png" alt="쉐킷투유 로고" className="w-60 object-center" />
-        <span className="text-4xl font-bold text-white">{remainingTimeStr}</span>
+
+        {showResult ? (
+          <Button onClick={() => setShowResultModal(true)}>결과 보기</Button>
+        ) : (
+          <span className="text-4xl font-bold text-white">{remainingTimeStr}</span>
+        )}
       </header>
       <div className="p-4 h-full flex flex-col">
         <img
