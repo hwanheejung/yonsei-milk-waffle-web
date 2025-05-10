@@ -16,7 +16,7 @@ export class AdminApi {
     const instance = kyInstance ?? this.instance;
 
     const response = await instance
-      .get<AdminGameResponseDto>('admin/game', {
+      .get<AdminGameResponseDto>('api/admin/game', {
         ...options,
       })
       .json();
@@ -28,7 +28,7 @@ export class AdminApi {
     const instance = kyInstance ?? this.instance;
 
     const response = await instance
-      .post<AdminGameStartResponseDto>('admin/game/start', {
+      .post<AdminGameStartResponseDto>('api/admin/game/start', {
         json: data,
         ...options,
       })
