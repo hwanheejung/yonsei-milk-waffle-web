@@ -13,29 +13,27 @@ export const GameVibrate = ({
   const [signal, setSignal] = useState<'perfect' | 'good' | null>(null);
 
   useEffect(() => {
-    if (!isShacked || !resultBeatList || resultBeatList.length === 0) return;
+    if (!isShacked || !resultBeatList?.length) return;
 
-    const now = Date.now();
+    const handleUserAction = () => {
+      const now = Date.now();
+      const minDiff = Math.min(...resultBeatList.map((t) => Math.abs(now - t)));
 
-    const timeDiffs = resultBeatList.map((beatTime) => Math.abs(now - beatTime));
-
-    const minDiff = Math.min(...timeDiffs);
-
-    if ('vibrate' in navigator) {
-      if (minDiff <= PERFECT_THRESHOLD) {
-        navigator.vibrate([100, 50, 100]); // Perfect
-        setSignal('perfect');
-        console.log('PERFECT');
-      } else if (minDiff <= GOOD_THRESHOLD) {
-        navigator.vibrate(100); // Good
-        setSignal('good');
-        console.log('GOOD');
+      if ('vibrate' in navigator) {
+        if (minDiff <= PERFECT_THRESHOLD) {
+          navigator.vibrate([100, 50, 100]);
+          setSignal('perfect');
+        } else if (minDiff <= GOOD_THRESHOLD) {
+          navigator.vibrate(100);
+          setSignal('good');
+        }
       }
-    }
 
-    // 메시지는 잠깐만 보여줌
-    const timer = setTimeout(() => setSignal(null), 800);
-    return () => clearTimeout(timer);
+      window.removeEventListener('touchstart', handleUserAction); // 한번만 실행
+    };
+
+    window.addEventListener('touchstart', handleUserAction);
+    return () => window.removeEventListener('touchstart', handleUserAction);
   }, [isShacked, resultBeatList]);
 
   return (
