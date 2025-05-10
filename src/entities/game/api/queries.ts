@@ -2,18 +2,18 @@ import type { ReadGameStatusResponseDto } from '@/shared/api/dto';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { gameApi } from './instance';
 
-export const HELLO_QUERY_KEY = {
-  GET_HELLO: () => ['game', 'status'],
+export const GAME_QUERY_KEY = {
+  GET_GAME_STATUS: () => ['game', 'status'],
 };
 
 const queries = {
   getGameStatus: () => ({
-    queryKey: HELLO_QUERY_KEY.GET_HELLO(),
+    queryKey: GAME_QUERY_KEY.GET_GAME_STATUS(),
     queryFn: () => gameApi.getGameStatus(),
   }),
 };
 
-export { queries as helloQueries };
+export { queries as gameQueries };
 
 // ------------------ Query ---------------------
 

@@ -17,7 +17,7 @@ const mutations = {
   }),
 };
 
-export { mutations as gameQueries };
+export { mutations as gameMutations };
 
 // ------------------ Query ---------------------
 
