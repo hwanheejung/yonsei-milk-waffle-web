@@ -36,6 +36,7 @@ export const GameResultSender = ({
           body: { timestamp: userBeatList, team: Team.KOREA },
         })
           .then(() => {
+            setError('통과');
             navigate({ to: '/result' });
           })
           .catch((err) => {
