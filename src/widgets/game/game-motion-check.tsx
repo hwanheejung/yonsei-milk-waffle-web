@@ -23,6 +23,7 @@ export const GameMotionCheck = ({
   setUserBeatList: Dispatch<React.SetStateAction<number[]>>;
 }) => {
   const [countNumber, setCountNumber] = useState(0);
+  const [number, setNumber] = useState(0);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
@@ -45,13 +46,10 @@ export const GameMotionCheck = ({
       }
 
       if (Math.abs(x) >= threshold) {
-        const last = userMovements.current.at(-1);
-        if (!last || currentTime - last > 200) {
-          userMovements.current.push(currentTime);
-          setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
-          setCountNumber((prev) => prev + 1);
-          isIgnore.current = true;
-        }
+        userMovements.current.push(currentTime);
+        setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
+        setCountNumber((prev) => prev + 1);
+        isIgnore.current = true;
       }
     },
     [setUserBeatList]
@@ -105,6 +103,15 @@ export const GameMotionCheck = ({
           <div key={`game-${item}`}>{item}</div>
         ))}
       </div>
+      <div>{number}</div>
+      <button
+        type="button"
+        onClick={() => {
+          setNumber((prev) => prev + 1);
+        }}
+      >
+        클릭해요
+      </button>
     </div>
   );
 };
