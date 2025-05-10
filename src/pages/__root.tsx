@@ -6,9 +6,8 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <div>
-      <div>Hello "__root"!</div>
+    <>
       <Outlet />
-    </div>
+    </>
   );
 }

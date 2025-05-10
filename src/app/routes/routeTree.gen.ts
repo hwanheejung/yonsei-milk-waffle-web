@@ -11,9 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './../../pages/__root'
+import { Route as SelectTeamImport } from './../../pages/select-team'
 import { Route as IndexImport } from './../../pages/index'
 
 // Create/Update Routes
+
+const SelectTeamRoute = SelectTeamImport.update({
+  id: '/select-team',
+  path: '/select-team',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -32,6 +39,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/select-team': {
+      id: '/select-team'
+      path: '/select-team'
+      fullPath: '/select-team'
+      preLoaderRoute: typeof SelectTeamImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +53,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/select-team': typeof SelectTeamRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/select-team': typeof SelectTeamRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/select-team': typeof SelectTeamRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/select-team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/select-team'
+  id: '__root__' | '/' | '/select-team'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SelectTeamRoute: typeof SelectTeamRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SelectTeamRoute: SelectTeamRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +96,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/select-team"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/select-team": {
+      "filePath": "select-team.tsx"
     }
   }
 }
