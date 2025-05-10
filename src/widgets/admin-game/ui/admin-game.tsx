@@ -1,8 +1,10 @@
+// import { useGetGameQuery } from "@/entities/admin";
+// import { useStartGameMutation } from "@/entities/admin/api/mutations";
 import { useEffect, useRef, useState } from 'react';
 import { AudioPlayer } from './audio-player';
-import { BeatInfo } from './beat-info';
+import { BeatTrack } from './beat-track';
 import { GameControls } from './game-controls';
-// import { useGetGameQuery, useStartGameMutation } from '@/entities/admin/api/queries';
+import { Metronome } from './metronome';
 
 type TBeatData = {
   song_length: number;
@@ -11,11 +13,16 @@ type TBeatData = {
 
 // Dummy data
 const dummyBeatData: TBeatData = {
-  song_length: 30,
-  beat_list: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0],
+  song_length: 50,
+  beat_list: [
+    2.653, 4.606, 6.465, 6.832, 7.274, 7.733, 8.311, 9.269, 10.255, 11.55, 12.007, 13.957, 14.851,
+    15.81, 16.789, 17.684, 19.638, 20.506, 21.441, 22.789, 23.25, 23.833, 24.705, 25.591, 26.542,
+    27.097, 28.919, 30.801, 31.751, 32.661, 34.93, 35.669, 36.423, 37.207, 37.908, 38.661, 38.367,
+    40.127, 40.878, 41.636, 42.401, 43.157, 43.902, 44.662, 45.297, 45.423, 45.595, 45.775,
+  ],
 };
 
-export function AdminGame() {
+const AdminGame = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [beatData] = useState<TBeatData>(dummyBeatData);
@@ -23,8 +30,10 @@ export function AdminGame() {
   const startTimeRef = useRef<number>(0);
 
   // TODO: Uncomment when backend is ready
-  // const { data: gameData } = useGetGameQuery();
-  // const { mutate: startGame } = useStartGameMutation();
+  //   const { data: gameData } = useGetGameQuery();
+  // const { mutateAsync: startGame } = useStartGameMutation();
+
+  //   console.log(">>>", gameData);
 
   const handleStartGame = () => {
     if (!audioRef.current) return;
@@ -64,9 +73,13 @@ export function AdminGame() {
         remainingTime={beatData.song_length - currentTime}
       />
 
-      <BeatInfo songLength={beatData.song_length} beatCount={beatData.beat_list.length} />
+      <BeatTrack currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
+
+      <Metronome currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
 
       <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
     </div>
   );
-}
+};
+
+export { AdminGame };
