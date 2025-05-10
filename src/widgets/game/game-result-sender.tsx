@@ -12,6 +12,7 @@ export const GameResultSender = ({
   userBeatList: Timestamp[];
 }) => {
   const [error, setError] = useState('');
+  const [check, setChecked] = useState(false);
   const { mutateAsync: sendGameResult } = usePostGameMutation();
   const hasSentResult = useRef(false);
 
@@ -22,11 +23,15 @@ export const GameResultSender = ({
 
     const interval = setInterval(() => {
       const now = getCurrentUnixTime();
+      setChecked(!hasSentResult.current && now > gameEndTime);
+      console.log(!hasSentResult.current && now > gameEndTime);
       if (!hasSentResult.current && now > gameEndTime) {
         sendGameResult({
           body: { timestamp: userBeatList, team: Team.KOREA },
         })
-          .then(() => {})
+          .then(() => {
+            setError('submitted');
+          })
           .catch((err) => {
             setError(err);
           });
@@ -38,5 +43,10 @@ export const GameResultSender = ({
     return () => clearInterval(interval);
   }, [gameEndTime, userBeatList, sendGameResult]);
 
-  return error.trim().length !== 0 ? <div>Game Result: {error}</div> : null;
+  return (
+    <div>
+      {check}
+      {error.trim().length !== 0 ? <div>Game Result: {error}</div> : null}
+    </div>
+  );
 };

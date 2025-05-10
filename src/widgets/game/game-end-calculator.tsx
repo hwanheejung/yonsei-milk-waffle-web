@@ -19,12 +19,6 @@ export const GameEndCalculator = ({
         })
       );
     };
-    eventSource.onopen = () => {
-      console.log('openned');
-    };
-    eventSource.onmessage = () => {
-      console.log('success');
-    };
 
     eventSource.onerror = (error) => {
       console.error('SSE Error:', error);
