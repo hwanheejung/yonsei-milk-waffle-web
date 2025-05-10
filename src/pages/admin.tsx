@@ -7,7 +7,12 @@ export const Route = createFileRoute('/admin')({
 
 function RouteComponent() {
   return (
-    <div className="container mx-auto p-4 min-h-dvh flex flex-col">
+    <div className="relative mx-auto p-4 min-h-dvh flex flex-col">
+      <img
+        src="/images/toyou_bg.gif"
+        alt="toyou_bg"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 -z-10"
+      />
       <AdminGame />
     </div>
   );
