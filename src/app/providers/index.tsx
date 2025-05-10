@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
-import { TanstackQueryProvider } from './tanstack-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { TanstackQueryProvider } from './tanstack-query';
 
 const Providers = ({ children }: PropsWithChildren) => {
   return (
