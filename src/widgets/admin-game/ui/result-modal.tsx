@@ -97,7 +97,7 @@ const ResultGraph = ({
           <img
             src={TEAM_INFO[winner.team as Team].character}
             alt={`${winner.team} 캐릭터`}
-            className="w-48 h-48 object-contain"
+            className="w-96 h-96 object-contain"
           />
         </div>
       )}
