@@ -31,5 +31,5 @@ export const GameEndCalculator = ({
     };
   }, [setGameEndTime]);
 
-  return error.trim().length !== 0 ? <div>{error}</div> : null;
+  return error.trim().length !== 0 ? <div>Game End Calculator: {error}</div> : null;
 };

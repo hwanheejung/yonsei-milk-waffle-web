@@ -37,5 +37,5 @@ export const GameResultSender = ({
     return () => clearInterval(interval);
   }, [gameEndTime, userBeatList, sendGameResult]);
 
-  return error.trim().length !== 0 ? <div>{error}</div> : null;
+  return error.trim().length !== 0 ? <div>Game Result: {error}</div> : null;
 };
