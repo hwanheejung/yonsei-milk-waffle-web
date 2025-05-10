@@ -1,7 +1,7 @@
 import { useStartGameMutation } from '@/entities/admin/api/mutations';
 import { useGetGameSuspenseQuery } from '@/entities/admin/api/queries';
-import { Suspense } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useGameStore } from '@/feature/game-control';
+import { Suspense, useEffect, useRef } from 'react';
 import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
 import { Characters } from './characters';
@@ -18,38 +18,45 @@ const AdminGame = () => {
 export { AdminGame };
 
 const AdminGameContent = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const startTimeRef = useRef<number>(0);
 
   const { data: beatData } = useGetGameSuspenseQuery();
   const { mutateAsync: startGame } = useStartGameMutation();
 
+  const {
+    isPlaying,
+    currentTime,
+    setIsPlaying,
+    setCurrentTime,
+    startGame: startGameState,
+    resetGame,
+  } = useGameStore();
+
   const handleStartGame = async () => {
     if (!audioRef.current || !beatData) return;
-    const response = await startGame({ game_started_at: Date.now() });
-    console.log(response);
+    await startGame({ game_started_at: Date.now() });
     startTimeRef.current = Date.now();
     audioRef.current.play();
-    setIsPlaying(true);
+    startGameState();
   };
 
   useEffect(() => {
     if (!isPlaying || !beatData) return;
     const interval = setInterval(() => {
       if (audioRef.current) {
-        const currentTime = (Date.now() - startTimeRef.current) / 1000;
-        setCurrentTime(currentTime);
-        if (currentTime >= beatData.song_length) {
+        const now = (Date.now() - startTimeRef.current) / 1000;
+        setCurrentTime(now);
+        if (now >= beatData.song_length) {
           audioRef.current.pause();
           setIsPlaying(false);
           setCurrentTime(0);
+          resetGame();
         }
       }
     }, 100);
     return () => clearInterval(interval);
-  }, [isPlaying, beatData]);
+  }, [isPlaying, beatData, setCurrentTime, setIsPlaying, resetGame]);
 
   return (
     <>
