@@ -10,16 +10,20 @@ export const GameResultSender = ({
   gameEndTime: number | null;
   userBeatList: Timestamp[];
 }) => {
-  const { mutate: sendGameResult } = usePostGameMutation();
+  const { mutateAsync: sendGameResult } = usePostGameMutation();
   const hasSentResult = useRef(false);
 
   useEffect(() => {
-    if (gameEndTime === null) return;
+    if (gameEndTime === null) {
+      return;
+    }
 
     const interval = setInterval(() => {
       const now = getCurrentUnixTime();
       if (!hasSentResult.current && now > gameEndTime) {
-        sendGameResult({ body: { timestamp: userBeatList, team: 'KOREA' } });
+        sendGameResult({
+          body: { timestamp: userBeatList, team: 'KOREA' },
+        }).then(() => {});
         hasSentResult.current = true;
         clearInterval(interval);
       }

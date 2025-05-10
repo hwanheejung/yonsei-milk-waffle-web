@@ -79,7 +79,6 @@ export const GameMotionCheck = ({
           .then((response) => {
             if (response === 'granted') {
               startDetection();
-              console.log('접속 성공');
             } else {
               alert('센서 접근 권한이 필요합니다.');
             }

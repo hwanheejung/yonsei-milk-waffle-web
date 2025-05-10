@@ -13,8 +13,8 @@ export const GameEndCalculator = ({
       const parsedData = JSON.parse(event.data);
       setGameEndTime(
         calculateGameEndTime({
-          gameStartTime: parsedData.game_start_at,
-          songLength: parsedData.song_length,
+          gameStartTime: Number(parsedData.game_started_at),
+          songLength: Number(parsedData.song_length),
         })
       );
     };
