@@ -19,7 +19,7 @@ export { AdminGame };
 const AdminGameContent = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { data: beatData } = useGetGameSuspenseQuery();
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState(true);
 
   // zustand
   const isPlaying = useGameStore((s) => s.isPlaying);

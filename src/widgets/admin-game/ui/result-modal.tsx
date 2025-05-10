@@ -18,23 +18,67 @@ const dummyData: ResultData = {
   ],
 };
 
+// 숫자 카운터 애니메이션을 위한 커스텀 훅
+const useCounter = (target: number, duration = 1000) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime: number;
+    let animationFrame: number;
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+
+      setCount(Math.floor(progress * target));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [target, duration]);
+
+  return count;
+};
+
 const ResultModal = () => {
   const [resultData] = useState<ResultData>(dummyData);
   const [currentLevel, setCurrentLevel] = useState(-1);
   const maxScore = Math.max(...resultData.scores.map((s) => s.score));
 
-  // 점수 레벨을 오름차순으로 정렬하고 0을 추가
   const scoreLevels = [
     0,
     ...Array.from(new Set(resultData.scores.map((s) => s.score))).sort((a, b) => a - b),
   ];
 
+  // 각 팀의 현재 점수에 대한 카운터
+  const seoulCounter = useCounter(
+    Math.min(resultData.scores[0].score, scoreLevels[currentLevel]),
+    1000
+  );
+  const koreaCounter = useCounter(
+    Math.min(resultData.scores[1].score, scoreLevels[currentLevel]),
+    1000
+  );
+  const yonseiCounter = useCounter(
+    Math.min(resultData.scores[2].score, scoreLevels[currentLevel]),
+    1000
+  );
+  const kaistCounter = useCounter(
+    Math.min(resultData.scores[3].score, scoreLevels[currentLevel]),
+    1000
+  );
+
   useEffect(() => {
     const animate = async () => {
       for (let i = 0; i < scoreLevels.length; i++) {
         setCurrentLevel(i);
-        // 각 레벨에서 1초 대기
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // 애니메이션 시간 + 대기 시간
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     };
     animate();
@@ -45,10 +89,11 @@ const ResultModal = () => {
       <div className="flex flex-col justify-between p-8 w-full h-[60%] text-center bg-[url('/images/result-background.png')] bg-cover bg-center">
         <h2 className="text-2xl font-bold mb-10 text-white">게임 종료!</h2>
         <div className="flex justify-center items-end gap-8 h-[300px] mb-10">
-          {resultData.scores.map((teamScore) => {
+          {resultData.scores.map((teamScore, index) => {
             const currentMaxScore = scoreLevels[currentLevel];
             const displayScore = Math.min(teamScore.score, currentMaxScore);
             const height = (displayScore / maxScore) * 250;
+            const animatedScore = [seoulCounter, koreaCounter, yonseiCounter, kaistCounter][index];
 
             return (
               <div key={teamScore.team} className="flex flex-col items-center">
@@ -59,7 +104,7 @@ const ResultModal = () => {
                   }}
                 />
                 <span className="mt-2 text-lg font-bold text-white">{teamScore.team}</span>
-                <span className="text-sm text-white">{teamScore.score}점</span>
+                <span className="text-2xl text-white">{animatedScore}점</span>
               </div>
             );
           })}
