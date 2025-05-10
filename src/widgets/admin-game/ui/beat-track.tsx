@@ -3,7 +3,7 @@ import { cn } from '@/shared/lib/utils';
 const BeatTrack = ({ currentTime, beatList, isPlaying }: TProps) => {
   // Calculate visible beats (current time ± 2 seconds)
   const visibleBeats = beatList.filter(
-    (beat) => beat >= currentTime - 2 && beat <= currentTime + 2
+    (beat) => beat / 1000 >= currentTime - 2 && beat / 1000 <= currentTime + 2
   );
 
   return (
@@ -27,14 +27,15 @@ const BeatTrack = ({ currentTime, beatList, isPlaying }: TProps) => {
       >
         {/* Beat markers */}
         {visibleBeats.map((beat) => {
-          const isCenter = Math.abs(beat - currentTime) < 0.05;
+          const beatInSeconds = beat / 1000;
+          const isCenter = Math.abs(beatInSeconds - currentTime) < 0.05;
           return (
             <div
               key={beat}
               className={cn(
                 'absolute top-1/2 -translate-y-1/2 left-0 z-20 flex items-center justify-center'
               )}
-              style={{ left: `${beat * 100}%` }}
+              style={{ left: `${beatInSeconds * 100}%` }}
             >
               {/* Pop effect */}
               <span
