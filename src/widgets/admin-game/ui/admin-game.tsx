@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
-import { CheerleadingStick } from './cheerleading-stick';
+import { Characters } from './characters';
 import { GameControls } from './game-controls';
 
 type TBeatData = {
@@ -66,7 +66,7 @@ const AdminGame = () => {
   }, [isPlaying, beatData.song_length]);
 
   return (
-    <div className="space-y-4">
+    <>
       <GameControls
         isPlaying={isPlaying}
         onStart={handleStartGame}
@@ -75,14 +75,15 @@ const AdminGame = () => {
 
       <BeatTrack currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
 
-      <CheerleadingStick
+      <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
+
+      <Characters
         currentTime={currentTime}
         beatList={beatData.beat_list}
         isPlaying={isPlaying}
+        className="mt-auto"
       />
-
-      <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
-    </div>
+    </>
   );
 };
 

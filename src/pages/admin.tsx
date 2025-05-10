@@ -7,7 +7,7 @@ export const Route = createFileRoute('/admin')({
 
 function RouteComponent() {
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 min-h-dvh flex flex-col">
       <AdminGame />
     </div>
   );
