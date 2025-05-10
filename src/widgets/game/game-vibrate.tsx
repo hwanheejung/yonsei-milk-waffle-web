@@ -27,9 +27,11 @@ export const GameVibrate = ({
     } else if (minDiff <= GOOD_THRESHOLD) {
       setSignal('good');
       goodVibrateButtonRef.current?.click();
+    } else {
+      setSignal(null);
     }
 
-    const timer = setTimeout(() => setSignal(null), 300);
+    const timer = setTimeout(() => setSignal(null), 100);
     return () => clearTimeout(timer);
   }, [isShacked, resultBeatList]);
 
@@ -37,10 +39,10 @@ export const GameVibrate = ({
     <>
       <div className="absolute top-1/3 w-full flex justify-center z-50 pointer-events-none">
         {signal === 'perfect' && (
-          <div className="text-[100px] font-bold text-green-500 animate-bounce">PERFECT!</div>
+          <div className="text-[80px] font-bold text-green-500 animate-bounce">PERFECT!</div>
         )}
         {signal === 'good' && (
-          <div className="text-[100px]] font-bold text-yellow-500 animate-bounce">GOOD!</div>
+          <div className="text-[80px] font-bold text-yellow-500 animate-bounce">GOOD!</div>
         )}
       </div>
       <div className="flex flex-col gap-3">
@@ -64,7 +66,7 @@ export const GameVibrate = ({
         <button
           ref={perfectVibrateButtonRef}
           type="button"
-          onClick={() => navigator.vibrate([300, 100, 300])}
+          onClick={() => navigator.vibrate(300)}
           className="hidden"
         >
           PERFECT 진동
