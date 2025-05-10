@@ -1,4 +1,4 @@
-import type { Timestamp } from '@/entities/score/Timestamp';
+import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
 
 export const getUpdatedTimstamp = ({
