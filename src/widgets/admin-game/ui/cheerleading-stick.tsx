@@ -23,7 +23,7 @@ const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
     const timeInCurrentBeat = currentTime - prevBeat;
     const progress = timeInCurrentBeat / beatInterval;
 
-    const maxAngle = 30;
+    const maxAngle = 50;
     const angle = progress * maxAngle;
     return angle;
   };

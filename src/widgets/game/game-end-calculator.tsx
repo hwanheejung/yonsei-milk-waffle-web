@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { calculateGameEndTime } from '@/feature/game/game-time-calculator';
 import { useGetGameStatus } from '@/entities/game/api/queries';
+import { calculateGameEndTime } from '@/feature/game/game-time-calculator';
+import { useEffect, useRef } from 'react';
 
 export const GameEndCalculator = ({
   setGameEndTime,
@@ -25,7 +25,7 @@ export const GameEndCalculator = ({
     if (isSuccess) {
       setGameEndTime(
         calculateGameEndTime({
-          gameStartTime: gameStatus.game_start_at,
+          gameStartTime: gameStatus.game_started_at,
           songLength: gameStatus.song_length,
         })
       );
