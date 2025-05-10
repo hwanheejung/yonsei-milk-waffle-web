@@ -1,5 +1,5 @@
 import { getCurrentUnixTime } from '@/shared/lib/date';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
 import { cn } from '@/shared/lib/utils';
 
@@ -18,11 +18,14 @@ const isDeviceMotionEventWithPermission = (
 export const GameMotionCheck = ({
   setUserBeatList,
   setUserBeatHistory,
+  isShacked,
+  setIsShacked,
 }: {
   setUserBeatList: Dispatch<React.SetStateAction<number[]>>;
   setUserBeatHistory: Dispatch<React.SetStateAction<{ time: number; x: number }[]>>;
+  isShacked: boolean;
+  setIsShacked: (input: boolean) => void;
 }) => {
-  const [shacked, setShacked] = useState(false);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
@@ -53,14 +56,14 @@ export const GameMotionCheck = ({
         if (!last || currentTime - last > 200) {
           userMovements.current.push(currentTime);
           setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
-          setShacked(true);
+          setIsShacked(true);
           isIgnore.current = true;
 
-          setTimeout(() => setShacked(false), 100); // 300ms 후 원래 크기로 복귀
+          setTimeout(() => setIsShacked(false), 100); // 300ms 후 원래 크기로 복귀
         }
       }
     },
-    [setUserBeatHistory, setUserBeatList]
+    [setUserBeatHistory, setUserBeatList, setIsShacked]
   );
 
   const startDetection = useCallback(() => {
@@ -104,7 +107,7 @@ export const GameMotionCheck = ({
       <div
         className={cn(
           'w-24 h-24 rounded-full bg-blue-500 transition-transform duration-300 ease-out',
-          shacked ? 'scale-150' : 'scale-100'
+          isShacked ? 'scale-150' : 'scale-100'
         )}
       />
     </div>
