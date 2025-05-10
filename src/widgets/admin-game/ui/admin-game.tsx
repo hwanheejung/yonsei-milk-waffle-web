@@ -30,10 +30,6 @@ const AdminGameContent = () => {
   const startTime = useGameStore((s) => s.startTime);
   const resetGame = useGameStore((s) => s.resetGame);
 
-  useEffect(() => {
-    console.log(beatData.beat_list);
-  }, [beatData]);
-
   // 남은 시간 계산
   const remainingTime = Math.max(0, Math.floor(beatData.song_length - currentTime));
   const remainingTimeStr = String(remainingTime).padStart(2, '0');
