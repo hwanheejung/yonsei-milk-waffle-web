@@ -1,15 +1,14 @@
 import type { Timestamp } from '@/entities/time/Timestamp';
-import { getCurrentUnixTime } from '@/shared/lib/date';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Dispatch } from 'react';
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
 } from 'recharts';
 
 interface DeviceMotionEventConstructor {
