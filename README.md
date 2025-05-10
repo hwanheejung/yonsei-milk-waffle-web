@@ -44,9 +44,25 @@
 
 ## 💻 주요 사용 기술
 
-* **프론트엔드 (클라이언트):** HTML, CSS, JavaScript (웹 기반 애플리케이션)
+* **프론트엔드 (클라이언트):** (웹 기반 애플리케이션)
     * Device Motion API (가속도계, 자이로스코프 센서 데이터 접근)
     * Vibrate API를 사용한 햅틱 기능
+ 
+   | Category | Technologies |
+   |----------|--------------|
+   | Frontend Framework | React 19 |
+   | Build Tool | Vite |
+   | Language | TypeScript |
+   | Routing | @tanstack/react-router |
+   | State Management | Zustand |
+   | Data Fetching | @tanstack/react-query, ky |
+   | Styling | Tailwind CSS |
+   | UI Components | shadcn |
+   | Code Quality | Biome |
+   | Package Manager | Yarn |
+   | Git Hooks | Husky, lint-staged |
+   | Deploy | Vercel |
+
 * **백엔드 (서버):** Python (FastAPI), Poetry, SSE
     * API 서버 (게임 정보, 비트 데이터 제공, 게임 시작/종료 관리, 점수 집계 및 결과 반환)
 * **데이터 저장:** 인메모리 데이터 구조 활용 (핵커톤 기간 내 빠른 프로토타이핑을 위함)
