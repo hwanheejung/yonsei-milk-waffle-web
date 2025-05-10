@@ -28,3 +28,7 @@ export type ReadGameStatusResponseDto = {
   game_started_at: number;
   song_length: number;
 };
+
+export type CreateSelectTeamRequestDto = {
+  team: Team;
+};
