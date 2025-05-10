@@ -1,4 +1,5 @@
 import type { Timestamp } from '@/entities/time/Timestamp';
+import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
 import {
@@ -37,35 +38,39 @@ export const GameMotionCheck = ({
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
 
-  const handleMotion = useCallback((event: DeviceMotionEvent) => {
-    const acceleration = event.accelerationIncludingGravity;
-    if (!acceleration || startTime.current === null) return;
+  const handleMotion = useCallback(
+    (event: DeviceMotionEvent) => {
+      const acceleration = event.accelerationIncludingGravity;
+      if (!acceleration || startTime.current === null) return;
 
-    const currentTime = Date.now() - startTime.current;
-    const x = acceleration.x ?? 0;
+      const currentTime = Date.now() - startTime.current;
+      const x = acceleration.x ?? 0;
 
-    const threshold = 40;
-    setGraphData((prev) => [...prev, { time: currentTime, x }]);
+      const threshold = 40;
+      setGraphData((prev) => [...prev, { time: currentTime, x }]);
 
-    // ignore 중이면 감지하지 않음
-    if (isIgnore.current) {
-      // 다시 threshold 아래로 떨어졌는지 확인
-      if (Math.abs(x) < threshold) {
-        isIgnore.current = false; // 감지 다시 허용
+      // ignore 중이면 감지하지 않음
+      if (isIgnore.current) {
+        // 다시 threshold 아래로 떨어졌는지 확인
+        if (Math.abs(x) < threshold) {
+          isIgnore.current = false; // 감지 다시 허용
+        }
+        return;
       }
-      return;
-    }
 
-    // threshold 초과시 감지 + ignore 활성화
-    if (Math.abs(x) >= threshold) {
-      const last = userMovements.current.at(-1);
-      if (!last || currentTime - last > 200) {
-        userMovements.current.push(currentTime);
-        setCountNumber((prev) => prev + 1);
-        isIgnore.current = true; // 감지 일시 정지
+      // threshold 초과시 감지 + ignore 활성화
+      if (Math.abs(x) >= threshold) {
+        const last = userMovements.current.at(-1);
+        if (!last || currentTime - last > 200) {
+          userMovements.current.push(currentTime);
+          setCountNumber((prev) => prev + 1);
+          setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
+          isIgnore.current = true;
+        }
       }
-    }
-  }, []);
+    },
+    [setUserBeatList]
+  );
 
   const startDetection = useCallback(() => {
     userMovements.current = [];
