@@ -20,7 +20,7 @@ export class GameApi {
     const instance = kyInstance ?? this.instance;
 
     const response = await instance
-      .post<CreateGameResultRequestDto>('/api/game/submit', {
+      .post<CreateGameResultRequestDto>('api/game/submit', {
         json: data,
         ...options,
       })
@@ -33,7 +33,7 @@ export class GameApi {
     const instance = kyInstance ?? this.instance;
 
     const response = await instance
-      .get<ReadGameStatusResponseDto>('/api/game/status', {
+      .get<ReadGameStatusResponseDto>('api/game/status', {
         ...options,
       })
       .json();

@@ -2,6 +2,15 @@ import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface DeviceMotionEventConstructor {
   new (type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
@@ -23,39 +32,41 @@ export const GameMotionCheck = ({
   setUserBeatList: Dispatch<React.SetStateAction<number[]>>;
 }) => {
   const [countNumber, setCountNumber] = useState(0);
+  const [number, setNumber] = useState(0);
+  const [graphData, setGraphData] = useState<{ time: number; x: number }[]>([]);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
 
-  const handleMotion = useCallback(
-    (event: DeviceMotionEvent) => {
-      const acceleration = event.accelerationIncludingGravity;
-      if (!acceleration || startTime.current === null) return;
+  const handleMotion = useCallback((event: DeviceMotionEvent) => {
+    const acceleration = event.accelerationIncludingGravity;
+    if (!acceleration || startTime.current === null) return;
 
-      const currentTime = Date.now() - startTime.current;
-      const x = acceleration.x ?? 0;
+    const currentTime = Date.now() - startTime.current;
+    const x = acceleration.x ?? 0;
 
-      const threshold = 60;
+    const threshold = 40;
+    setGraphData((prev) => [...prev, { time: currentTime, x }]);
 
-      if (isIgnore.current) {
-        if (Math.abs(x) < threshold) {
-          isIgnore.current = false;
-        }
-        return;
+    // ignore 중이면 감지하지 않음
+    if (isIgnore.current) {
+      // 다시 threshold 아래로 떨어졌는지 확인
+      if (Math.abs(x) < threshold) {
+        isIgnore.current = false; // 감지 다시 허용
       }
+      return;
+    }
 
-      if (Math.abs(x) >= threshold) {
-        const last = userMovements.current.at(-1);
-        if (!last || currentTime - last > 200) {
-          userMovements.current.push(currentTime);
-          setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
-          setCountNumber((prev) => prev + 1);
-          isIgnore.current = true;
-        }
+    // threshold 초과시 감지 + ignore 활성화
+    if (Math.abs(x) >= threshold) {
+      const last = userMovements.current.at(-1);
+      if (!last || currentTime - last > 200) {
+        userMovements.current.push(currentTime);
+        setCountNumber((prev) => prev + 1);
+        isIgnore.current = true; // 감지 일시 정지
       }
-    },
-    [setUserBeatList]
-  );
+    }
+  }, []);
 
   const startDetection = useCallback(() => {
     userMovements.current = [];
@@ -63,10 +74,6 @@ export const GameMotionCheck = ({
     startTime.current = Date.now();
 
     window.addEventListener('devicemotion', handleMotion);
-
-    setTimeout(() => {
-      window.removeEventListener('devicemotion', handleMotion);
-    }, 10000);
   }, [handleMotion, setUserBeatList]);
 
   const checkSensorPermission = useCallback(() => {
@@ -79,7 +86,6 @@ export const GameMotionCheck = ({
           .then((response) => {
             if (response === 'granted') {
               startDetection();
-              console.log('접속 성공');
             } else {
               alert('센서 접근 권한이 필요합니다.');
             }
@@ -105,6 +111,26 @@ export const GameMotionCheck = ({
         {userBeatList.map((item) => (
           <div key={`game-${item}`}>{item}</div>
         ))}
+      </div>
+      <div>{number}</div>
+      <button
+        type="button"
+        onClick={() => {
+          setNumber((prev) => prev + 1);
+        }}
+      >
+        클릭해요
+      </button>
+      <div className="w-full h-64 mt-6">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={graphData}>
+            <CartesianGrid stroke="#ccc" />
+            <XAxis dataKey="time" unit="ms" />
+            <YAxis domain={['auto', 'auto']} />
+            <Tooltip />
+            <Line type="monotone" dataKey="x" stroke="#ff7300" dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

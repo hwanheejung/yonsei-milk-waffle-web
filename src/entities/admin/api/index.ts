@@ -28,11 +28,11 @@ export class AdminApi {
     const instance = kyInstance ?? this.instance;
 
     const response = await instance
-      .post<AdminGameStartResponseDto>('api/admin/game/start', {
+      .post<AdminGameStartRequestDto>('api/admin/game/start', {
         json: data,
         ...options,
       })
-      .json();
+      .json<AdminGameStartResponseDto>();
 
     return response;
   }

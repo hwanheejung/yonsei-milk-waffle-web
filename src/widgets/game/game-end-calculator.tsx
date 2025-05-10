@@ -1,36 +1,41 @@
-import { useGetGameStatus } from '@/entities/game/api/queries';
+import { API_BASE_URL } from '@/shared/constants/env';
 import { calculateGameEndTime } from '@/feature/game/game-time-calculator';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export const GameEndCalculator = ({
   setGameEndTime,
 }: {
   setGameEndTime: (input: number | null) => void;
 }) => {
-  const { data: gameStatus, refetch: refetchGameStatus, isSuccess } = useGetGameStatus();
-
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
+  const [error, setError] = useState('');
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      refetchGameStatus();
-    }, 30000);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [refetchGameStatus]);
-
-  useEffect(() => {
-    if (isSuccess) {
+    const eventSource = new EventSource(`${API_BASE_URL}api/game/status`);
+    eventSource.onmessage = (event) => {
+      const parsedData = JSON.parse(event.data);
       setGameEndTime(
         calculateGameEndTime({
-          gameStartTime: gameStatus.game_started_at,
-          songLength: gameStatus.song_length,
+          gameStartTime: Number(parsedData.game_started_at),
+          songLength: Number(parsedData.song_length),
         })
       );
-    }
-  }, [gameStatus, isSuccess, setGameEndTime]);
+    };
+    eventSource.onopen = () => {
+      console.log('openned');
+    };
+    eventSource.onmessage = () => {
+      console.log('success');
+    };
 
-  return null;
+    eventSource.onerror = (error) => {
+      console.error('SSE Error:', error);
+      eventSource.close();
+      setError(error.type);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [setGameEndTime]);
+
+  return error.trim().length !== 0 ? <div>Game End Calculator: {error}</div> : null;
 };
