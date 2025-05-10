@@ -1,10 +1,11 @@
+import { TEAM_INFO, Team } from '@/entities/team';
 import { cn } from '@/shared/lib/utils';
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui';
 import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
 const TeamSelectForm = () => {
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(TEAMS[0].name);
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(TEAM_INFO[Team.SEOUL].name);
 
   const router = useRouter();
 
@@ -14,7 +15,7 @@ const TeamSelectForm = () => {
         <CardTitle className="text-center font-bold text-2xl">학교를 선택해주세요!</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-2">
-        {TEAMS.map((team) => (
+        {Object.values(TEAM_INFO).map((team) => (
           <Button
             variant="outline"
             key={team.name}
@@ -42,22 +43,3 @@ const TeamSelectForm = () => {
 };
 
 export { TeamSelectForm };
-
-const TEAMS = [
-  {
-    name: '서울대',
-    image: '/images/seoul.png',
-  },
-  {
-    name: '연세대',
-    image: '/images/yonsei.svg',
-  },
-  {
-    name: '고려대',
-    image: '/images/korea.png',
-  },
-  {
-    name: '카이스트',
-    image: '/images/kaist.png',
-  },
-];

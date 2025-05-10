@@ -1,4 +1,4 @@
-import type { Team } from '@/entities/team/Team';
+import type { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 
 export type HelloReqeustDto = {
