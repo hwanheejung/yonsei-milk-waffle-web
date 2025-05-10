@@ -1,8 +1,6 @@
 import { usePostGameMutation } from '@/entities/game/api/mutations';
 import { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
-
-import { Button } from '@/shared/ui';
 import { setStorage } from '@/shared/lib/sessionStorage';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -26,5 +24,13 @@ export const GameResultSender = ({
     navigate({ to: '/result' });
   };
 
-  return <Button onClick={handleCloseSubmit}>종료하기</Button>;
+  return (
+    <button
+      type="button"
+      className="bg-red-500 text-white px-6 py-3 rounded-lg w-[267px] font-medium"
+      onClick={handleCloseSubmit}
+    >
+      결과 제출하기
+    </button>
+  );
 };

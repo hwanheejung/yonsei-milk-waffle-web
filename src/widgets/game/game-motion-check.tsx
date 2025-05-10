@@ -108,6 +108,18 @@ export const GameMotionCheck = ({
           isShacked ? 'scale-150' : 'scale-100'
         )}
       />
+      <div className="flex flex-col gap-2 text-center">
+        <div>
+          <p className="text-sm text-gray-900">아이폰 사용자는 꼭 눌러주세요!</p>
+        </div>
+        <button
+          type="button"
+          onClick={checkSensorPermission}
+          className="bg-blue-500 text-white px-6 py-3 rounded-lg w-[267px] font-medium"
+        >
+          센서 이용 허가하기
+        </button>
+      </div>
     </>
   );
 };

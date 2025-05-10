@@ -46,15 +46,17 @@ export const GameVibrate = ({
         )}
       </div>
       <div className="flex flex-col gap-3 text-center">
-        <p className="text-sm text-gray-900">진동 모드를 켜면 더 재미있는 플레이가 가능해요.</p>
-        <p className="text-sm text-gray-900">(안드로이드 크롬에서만 사용 가능합니다.)</p>
+        <div>
+          <p className="text-sm text-gray-900">진동 모드를 켜면 더 재미있는 플레이가 가능해요.</p>
+          <p className="text-sm text-gray-900">(안드로이드 크롬에서만 사용 가능합니다.)</p>
+        </div>
         <button
           ref={vibrateButtonRef}
           type="button"
           onClick={() => navigator.vibrate(300)}
           className="w-full bg-blue-800 text-white py-3 rounded-lg"
         >
-          진동 모드 켜기
+          진동 모드 사용하기
         </button>
         <button
           ref={goodVibrateButtonRef}
