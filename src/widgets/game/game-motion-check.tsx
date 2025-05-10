@@ -1,5 +1,4 @@
 import type { Timestamp } from '@/entities/time/Timestamp';
-import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
 import {
