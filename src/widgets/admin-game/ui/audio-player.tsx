@@ -1,7 +1,21 @@
 import type { RefObject } from 'react';
+import { useMemo } from 'react';
 
 const AudioPlayer = ({ audioRef, onEnded }: TProps) => {
-  return <audio ref={audioRef} src="/audio/to_you.mp3" onEnded={onEnded} className="hidden" />;
+  const audioElement = useMemo(
+    () => (
+      <audio
+        ref={audioRef}
+        src="/audio/to_you.mp3"
+        onEnded={onEnded}
+        className="hidden"
+        preload="auto"
+      />
+    ),
+    [audioRef, onEnded]
+  );
+
+  return audioElement;
 };
 
 export { AudioPlayer };
