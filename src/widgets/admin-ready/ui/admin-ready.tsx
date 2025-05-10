@@ -57,10 +57,10 @@ const AdminReady = () => {
 
 export { AdminReady };
 
-const TeamCount = ({ image, name, count }: TTeamCountProps) => {
+const TeamCount = ({ image, name }: TTeamCountProps) => {
   return (
     <div className="flex flex-col items-center">
-      <span className="text-2xl font-bold">{count}명</span>
+      {/* <span className="text-2xl font-bold">{count}명</span> */}
       <img src={image} alt={name} className="w-[200px] object-contain" />
     </div>
   );
