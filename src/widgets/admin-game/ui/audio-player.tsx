@@ -1,14 +1,12 @@
 import type { RefObject } from 'react';
 
-interface AudioPlayerProps {
+const AudioPlayer = ({ audioRef, onEnded }: TProps) => {
+  return <audio ref={audioRef} src="/audio/to_you.mp3" onEnded={onEnded} className="hidden" />;
+};
+
+export { AudioPlayer };
+
+type TProps = {
   audioRef: RefObject<HTMLAudioElement | null>;
   onEnded: () => void;
-}
-
-export function AudioPlayer({ audioRef, onEnded }: AudioPlayerProps) {
-  return (
-    <audio ref={audioRef} src="/audio/to_you.mp3" onEnded={onEnded} className="hidden">
-      <track kind="captions" src="" label="English" />
-    </audio>
-  );
-}
+};
