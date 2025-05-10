@@ -47,6 +47,7 @@ export const GameVibrate = ({
       </div>
       <div className="flex flex-col gap-3">
         <p className="text-sm text-gray-900">진동 모드를 켜면 더 재미있는 플레이가 가능해요.</p>
+        <p className="text-sm text-gray-900">(안드로이드 크롬에서만 사용 가능합니다.)</p>
         <button
           ref={vibrateButtonRef}
           type="button"

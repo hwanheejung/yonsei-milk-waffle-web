@@ -2,7 +2,7 @@ import { usePostGameMutation } from '@/entities/game/api/mutations';
 import { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { setStorage } from '@/shared/lib/sessionStorage';
 
@@ -15,6 +15,7 @@ export const GameResultSender = ({
   userBeatList: Timestamp[];
   userBeatHistory: { time: number; x: number }[];
 }) => {
+  const [error, setError] = useState('');
   const { mutateAsync: sendGameResult } = usePostGameMutation();
   const hasSentResult = useRef(false);
   const navigate = useNavigate();
@@ -27,13 +28,19 @@ export const GameResultSender = ({
     const interval = setInterval(() => {
       const now = getCurrentUnixTime();
       console.log(!hasSentResult.current && now > gameEndTime);
+
       if (!hasSentResult.current && now > gameEndTime) {
         setStorage({ key: 'BEAT_LIST', value: userBeatHistory });
+
         sendGameResult({
           body: { timestamp: userBeatList, team: Team.KOREA },
-        }).then(() => {
-          navigate({ to: '/result' });
-        });
+        })
+          .then(() => {
+            navigate({ to: '/result' });
+          })
+          .catch((err) => {
+            setError(JSON.stringify(err, null, 2));
+          });
 
         hasSentResult.current = true;
         clearInterval(interval);
@@ -43,5 +50,5 @@ export const GameResultSender = ({
     return () => clearInterval(interval);
   }, [gameEndTime, userBeatList, sendGameResult, navigate, userBeatHistory]);
 
-  return null;
+  return <div>{error}</div>;
 };
