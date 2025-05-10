@@ -68,6 +68,8 @@ export default function MotionCheck() {
     }, 10000);
   };
 
+  const isIgnore = useRef(false); // 추가: 감지 일시 정지 여부
+
   const handleMotion = (event: DeviceMotionEvent) => {
     const acceleration = event.accelerationIncludingGravity;
     if (!acceleration || startTime.current === null) return;
@@ -75,16 +77,27 @@ export default function MotionCheck() {
     const currentTime = Date.now() - startTime.current;
     const x = acceleration.x ?? 0;
 
-    // 그래프 데이터에 추가
+    // 그래프 데이터 추가
     setGraphData((prev) => [...prev, { time: currentTime, x }]);
 
-    const threshold = 10;
+    const threshold = 60;
 
-    if (Math.abs(acceleration.x ?? 0) > threshold) {
+    // ignore 중이면 감지하지 않음
+    if (isIgnore.current) {
+      // 다시 threshold 아래로 떨어졌는지 확인
+      if (Math.abs(x) < threshold) {
+        isIgnore.current = false; // 감지 다시 허용
+      }
+      return;
+    }
+
+    // threshold 초과시 감지 + ignore 활성화
+    if (Math.abs(x) >= threshold) {
       const last = userMovements.current.at(-1);
       if (!last || currentTime - last > 200) {
         userMovements.current.push(currentTime);
         setMovementCount((prev) => prev + 1);
+        isIgnore.current = true; // 감지 일시 정지
       }
     }
   };
