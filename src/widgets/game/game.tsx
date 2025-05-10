@@ -13,8 +13,7 @@ export const Game = () => {
   const [isShacked, setIsShacked] = useState(false);
 
   return (
-    <>
-      <div>{gameEndTime}</div>
+    <div className="min-h-screen w-full flex flex-col justify-center items-center gap-8">
       <GameEndCalculator setGameEndTime={setGameEndTime} setResultBeatList={setResultBeatList} />
       <GameResultSender
         gameEndTime={gameEndTime}
@@ -28,6 +27,6 @@ export const Game = () => {
         setUserBeatHistory={setUserBeatHistory}
       />
       <GameVibrate isShacked={isShacked} resultBeatList={resultBeatList} />
-    </>
+    </div>
   );
 };

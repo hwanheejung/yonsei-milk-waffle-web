@@ -100,16 +100,14 @@ export const GameMotionCheck = ({
   }, [checkSensorPermission]);
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-6">폰 흔들기 감지 테스트</h1>
-      <p className="text-lg mb-2">측정 중입니다...</p>
-      <p className="text-sm text-gray-600">폰을 좌우로 흔들어보세요!</p>
+    <>
+      <p className="text-2xl font-bold">폰을 좌우로 흔들어보세요!</p>
       <div
         className={cn(
-          'w-24 h-24 rounded-full bg-blue-500 transition-transform duration-300 ease-out',
+          'w-48 h-48 rounded-full bg-blue-500 transition-transform duration-300 ease-out',
           isShacked ? 'scale-150' : 'scale-100'
         )}
       />
-    </div>
+    </>
   );
 };

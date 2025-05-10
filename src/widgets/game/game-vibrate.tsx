@@ -37,31 +37,39 @@ export const GameVibrate = ({
     <>
       <div className="absolute top-1/3 w-full flex justify-center z-50 pointer-events-none">
         {signal === 'perfect' && (
-          <div className="text-3xl font-bold text-green-500 animate-bounce">PERFECT!</div>
+          <div className="text-[100px] font-bold text-green-500 animate-bounce">PERFECT!</div>
         )}
         {signal === 'good' && (
-          <div className="text-3xl font-bold text-yellow-500 animate-bounce">GOOD!</div>
+          <div className="text-[100px]] font-bold text-yellow-500 animate-bounce">GOOD!</div>
         )}
       </div>
-      <button ref={vibrateButtonRef} type="button" onClick={() => navigator.vibrate(300)}>
-        진동 모드 켜기
-      </button>
-      <button
-        ref={goodVibrateButtonRef}
-        type="button"
-        onClick={() => navigator.vibrate(150)}
-        className="hidden"
-      >
-        GOOD 진동
-      </button>
-      <button
-        ref={perfectVibrateButtonRef}
-        type="button"
-        onClick={() => navigator.vibrate([300, 100, 300])}
-        className="hidden"
-      >
-        PERFECT 진동
-      </button>
+      <div className="flex flex-col gap-3">
+        <p className="text-sm text-gray-900">진동 모드를 켜면 더 재미있는 플레이가 가능해요.</p>
+        <button
+          ref={vibrateButtonRef}
+          type="button"
+          onClick={() => navigator.vibrate(300)}
+          className="w-full bg-blue-800 text-white py-3 rounded-lg"
+        >
+          진동 모드 켜기
+        </button>
+        <button
+          ref={goodVibrateButtonRef}
+          type="button"
+          onClick={() => navigator.vibrate(150)}
+          className="hidden"
+        >
+          GOOD 진동
+        </button>
+        <button
+          ref={perfectVibrateButtonRef}
+          type="button"
+          onClick={() => navigator.vibrate([300, 100, 300])}
+          className="hidden"
+        >
+          PERFECT 진동
+        </button>
+      </div>
     </>
   );
 };
