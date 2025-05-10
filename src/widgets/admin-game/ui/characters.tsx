@@ -1,3 +1,5 @@
+import { Team } from '@/entities/team';
+import { TEAM_INFO } from '@/entities/team';
 import { cn } from '@/shared/lib/utils';
 import { CheerleadingStick } from './cheerleading-stick';
 
@@ -27,11 +29,11 @@ const Nupjugi = ({ currentTime, beatList, isPlaying }: TCharacterProps) => (
   <div className="relative">
     <div className="relative">
       <img
-        src="/images/character-kaist.png"
+        src={TEAM_INFO[Team.KAIST].character}
         alt="KAIST Character"
         className="w-[200px] h-[200px] object-contain"
       />
-      <div className="absolute -top-1 left-1/2 -translate-x-1/2">
+      <div className="absolute top-3 left-1/2 -translate-x-1/2">
         <CheerleadingStick currentTime={currentTime} beatList={beatList} isPlaying={isPlaying} />
       </div>
     </div>
@@ -42,7 +44,7 @@ const Yonsuri = ({ currentTime, beatList, isPlaying }: TCharacterProps) => (
   <div className="relative">
     <div className="relative">
       <img
-        src="/images/character-yonsei.png"
+        src={TEAM_INFO[Team.YONSEI].character}
         alt="Yonsei University Character"
         className="w-[200px] h-[200px] object-contain"
       />
@@ -57,7 +59,7 @@ const Seorini = ({ currentTime, beatList, isPlaying }: TCharacterProps) => (
   <div className="relative">
     <div className="relative">
       <img
-        src="/images/character-seoul.png"
+        src={TEAM_INFO[Team.SEOUL].character}
         alt="Seoul University Character"
         className="w-[220px] h-[220px] object-contain"
       />
@@ -72,7 +74,7 @@ const Tiger = ({ currentTime, beatList, isPlaying }: TCharacterProps) => (
   <div className="relative">
     <div className="relative">
       <img
-        src="/images/character_korea.gif"
+        src={TEAM_INFO[Team.KOREA].character}
         alt="Korea University Character"
         className="w-[200px] h-[200px] object-contain"
       />
