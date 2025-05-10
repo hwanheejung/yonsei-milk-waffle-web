@@ -26,7 +26,6 @@ export const GameMotionCheck = ({
   const [number, setNumber] = useState(0);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
-  const isIgnore = useRef(false);
 
   const handleMotion = useCallback(
     (event: DeviceMotionEvent) => {
@@ -38,18 +37,14 @@ export const GameMotionCheck = ({
 
       const threshold = 50;
 
-      if (isIgnore.current) {
-        if (Math.abs(x) < threshold) {
-          isIgnore.current = false;
-        }
-        return;
-      }
-
+      // threshold 초과시 감지 + ignore 활성화
       if (Math.abs(x) >= threshold) {
-        userMovements.current.push(currentTime);
-        setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
-        setCountNumber((prev) => prev + 1);
-        isIgnore.current = true;
+        const last = userMovements.current.at(-1);
+        if (!last || currentTime - last > 200) {
+          userMovements.current.push(currentTime);
+          setCountNumber((prev) => prev + 1);
+          setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
+        }
       }
     },
     [setUserBeatList]
