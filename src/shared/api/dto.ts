@@ -1,14 +1,6 @@
 import type { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 
-export type HelloReqeustDto = {
-  message: string;
-};
-
-export type HelloResponseDto = {
-  message: string;
-};
-
 export type AdminGameResponseDto = {
   song_length: number;
   beat_list: number[];
