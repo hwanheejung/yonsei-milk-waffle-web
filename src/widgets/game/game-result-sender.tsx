@@ -1,5 +1,5 @@
 import { usePostGameMutation } from '@/entities/game/api/mutations';
-import { Team } from '@/entities/team';
+import type { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 import { setStorage } from '@/shared/lib/sessionStorage';
 import { useNavigate } from '@tanstack/react-router';
@@ -19,7 +19,10 @@ export const GameResultSender = ({
     setStorage({ key: 'BEAT_LIST', value: userBeatHistory });
 
     sendGameResult({
-      body: { timestamp: userBeatList, team: Team.KOREA },
+      body: {
+        timestamp: userBeatList,
+        team: localStorage.getItem('team') as Team,
+      },
     }).then(() => {});
     navigate({ to: '/result' });
   };
