@@ -1,15 +1,7 @@
 import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { cn } from '@/shared/lib/utils';
 
 interface DeviceMotionEventConstructor {
   new (type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
@@ -25,11 +17,12 @@ const isDeviceMotionEventWithPermission = (
 
 export const GameMotionCheck = ({
   setUserBeatList,
+  setUserBeatHistory,
 }: {
   setUserBeatList: Dispatch<React.SetStateAction<number[]>>;
+  setUserBeatHistory: Dispatch<React.SetStateAction<{ time: number; x: number }[]>>;
 }) => {
-  const [countNumber, setCountNumber] = useState(0);
-  const [graphData, setGraphData] = useState<{ time: number; x: number }[]>([]);
+  const [shacked, setShacked] = useState(false);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
@@ -43,7 +36,7 @@ export const GameMotionCheck = ({
       const x = acceleration.x ?? 0;
 
       const threshold = 40;
-      setGraphData((prev) => [...prev, { time: currentTime, x }]);
+      setUserBeatHistory((prev) => [...prev, { time: currentTime, x }]);
 
       // ignore 중이면 감지하지 않음
       if (isIgnore.current) {
@@ -59,13 +52,15 @@ export const GameMotionCheck = ({
         const last = userMovements.current.at(-1);
         if (!last || currentTime - last > 200) {
           userMovements.current.push(currentTime);
-          setCountNumber((prev) => prev + 1);
           setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
+          setShacked(true);
           isIgnore.current = true;
+
+          setTimeout(() => setShacked(false), 100); // 300ms 후 원래 크기로 복귀
         }
       }
     },
-    [setUserBeatList]
+    [setUserBeatHistory, setUserBeatList]
   );
 
   const startDetection = useCallback(() => {
@@ -106,20 +101,12 @@ export const GameMotionCheck = ({
       <h1 className="text-2xl font-bold mb-6">폰 흔들기 감지 테스트</h1>
       <p className="text-lg mb-2">측정 중입니다...</p>
       <p className="text-sm text-gray-600">폰을 좌우로 흔들어보세요!</p>
-      <div className="mt-4 flex flex-col gap-2">
-        <div>{countNumber} 회</div>
-      </div>
-      <div className="w-full h-64 mt-6">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={graphData}>
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="time" unit="ms" />
-            <YAxis domain={['auto', 'auto']} />
-            <Tooltip />
-            <Line type="monotone" dataKey="x" stroke="#ff7300" dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <div
+        className={cn(
+          'w-24 h-24 rounded-full bg-blue-500 transition-transform duration-300 ease-out',
+          shacked ? 'scale-150' : 'scale-100'
+        )}
+      />
     </div>
   );
 };

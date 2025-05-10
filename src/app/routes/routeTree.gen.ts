@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './../../pages/__root'
 import { Route as SelectTeamImport } from './../../pages/select-team'
+import { Route as ResultImport } from './../../pages/result'
 import { Route as GameImport } from './../../pages/game'
 import { Route as AdminImport } from './../../pages/admin'
 import { Route as IndexImport } from './../../pages/index'
@@ -22,6 +23,12 @@ import { Route as AdminResultImport } from './../../pages/admin.result'
 const SelectTeamRoute = SelectTeamImport.update({
   id: '/select-team',
   path: '/select-team',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResultRoute = ResultImport.update({
+  id: '/result',
+  path: '/result',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GameImport
       parentRoute: typeof rootRoute
     }
+    '/result': {
+      id: '/result'
+      path: '/result'
+      fullPath: '/result'
+      preLoaderRoute: typeof ResultImport
+      parentRoute: typeof rootRoute
+    }
     '/select-team': {
       id: '/select-team'
       path: '/select-team'
@@ -107,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/game': typeof GameRoute
+  '/result': typeof ResultRoute
   '/select-team': typeof SelectTeamRoute
   '/admin/result': typeof AdminResultRoute
 }
@@ -115,6 +130,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/game': typeof GameRoute
+  '/result': typeof ResultRoute
   '/select-team': typeof SelectTeamRoute
   '/admin/result': typeof AdminResultRoute
 }
@@ -124,16 +140,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/game': typeof GameRoute
+  '/result': typeof ResultRoute
   '/select-team': typeof SelectTeamRoute
   '/admin/result': typeof AdminResultRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/game' | '/select-team' | '/admin/result'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/game'
+    | '/result'
+    | '/select-team'
+    | '/admin/result'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/game' | '/select-team' | '/admin/result'
-  id: '__root__' | '/' | '/admin' | '/game' | '/select-team' | '/admin/result'
+  to: '/' | '/admin' | '/game' | '/result' | '/select-team' | '/admin/result'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/game'
+    | '/result'
+    | '/select-team'
+    | '/admin/result'
   fileRoutesById: FileRoutesById
 }
 
@@ -141,6 +171,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   GameRoute: typeof GameRoute
+  ResultRoute: typeof ResultRoute
   SelectTeamRoute: typeof SelectTeamRoute
 }
 
@@ -148,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   GameRoute: GameRoute,
+  ResultRoute: ResultRoute,
   SelectTeamRoute: SelectTeamRoute,
 }
 
@@ -164,6 +196,7 @@ export const routeTree = rootRoute
         "/",
         "/admin",
         "/game",
+        "/result",
         "/select-team"
       ]
     },
@@ -178,6 +211,9 @@ export const routeTree = rootRoute
     },
     "/game": {
       "filePath": "game.tsx"
+    },
+    "/result": {
+      "filePath": "result.tsx"
     },
     "/select-team": {
       "filePath": "select-team.tsx"
