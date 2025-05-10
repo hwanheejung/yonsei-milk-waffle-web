@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const GameVibrate = ({
   isShacked,
@@ -11,6 +11,7 @@ export const GameVibrate = ({
   const GOOD_THRESHOLD = 1500; // ms
 
   const [signal, setSignal] = useState<'perfect' | 'good' | null>(null);
+  const vibrateButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isShacked || !resultBeatList?.length) return;
@@ -18,17 +19,15 @@ export const GameVibrate = ({
     const now = Date.now();
     const minDiff = Math.min(...resultBeatList.map((t) => Math.abs(now - t)));
 
-    if ('vibrate' in navigator) {
-      if (minDiff <= PERFECT_THRESHOLD) {
-        navigator.vibrate([100, 50, 100]);
-        setSignal('perfect');
-      } else if (minDiff <= GOOD_THRESHOLD) {
-        navigator.vibrate(100);
-        setSignal('good');
-      }
+    if (minDiff <= PERFECT_THRESHOLD) {
+      setSignal('perfect');
+      vibrateButtonRef.current?.click();
+    } else if (minDiff <= GOOD_THRESHOLD) {
+      setSignal('good');
+      vibrateButtonRef.current?.click();
     }
 
-    const timer = setTimeout(() => setSignal(null), 800);
+    const timer = setTimeout(() => setSignal(null), 300);
     return () => clearTimeout(timer);
   }, [isShacked, resultBeatList]);
 
@@ -42,7 +41,7 @@ export const GameVibrate = ({
           <div className="text-3xl font-bold text-yellow-500 animate-bounce">GOOD!</div>
         )}
       </div>
-      <button type="button" onClick={() => navigator.vibrate(100)}>
+      <button ref={vibrateButtonRef} type="button" onClick={() => navigator.vibrate(100)}>
         진동 테스트
       </button>
     </>
