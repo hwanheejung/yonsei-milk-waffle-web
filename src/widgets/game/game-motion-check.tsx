@@ -1,6 +1,7 @@
 import type { Timestamp } from '@/entities/time/Timestamp';
-import { getUpdatedTimstamp } from '@/feature/game/beat-calculator';
+import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
+import type { Dispatch } from 'react';
 
 interface DeviceMotionEventConstructor {
   new (type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
@@ -19,7 +20,7 @@ export const GameMotionCheck = ({
   setUserBeatList,
 }: {
   userBeatList: Timestamp[];
-  setUserBeatList: (input: Timestamp[]) => void;
+  setUserBeatList: Dispatch<React.SetStateAction<number[]>>;
 }) => {
   const [countNumber, setCountNumber] = useState(0);
   const startTime = useRef<number | null>(null);
@@ -47,13 +48,13 @@ export const GameMotionCheck = ({
         const last = userMovements.current.at(-1);
         if (!last || currentTime - last > 200) {
           userMovements.current.push(currentTime);
-          setUserBeatList(getUpdatedTimstamp({ userBeatList }));
+          setUserBeatList((prev) => [...prev, getCurrentUnixTime()]);
           setCountNumber((prev) => prev + 1);
           isIgnore.current = true;
         }
       }
     },
-    [setUserBeatList, userBeatList]
+    [setUserBeatList]
   );
 
   const startDetection = useCallback(() => {
