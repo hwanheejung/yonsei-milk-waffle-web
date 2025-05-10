@@ -35,7 +35,7 @@ export const GameMotionCheck = ({
       const currentTime = Date.now() - startTime.current;
       const x = acceleration.x ?? 0;
 
-      const threshold = 60;
+      const threshold = 50;
 
       if (isIgnore.current) {
         if (Math.abs(x) < threshold) {

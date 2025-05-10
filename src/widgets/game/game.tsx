@@ -1,4 +1,3 @@
-import { GameButton } from './game-button';
 import { GameResultSender } from './game-result-sender';
 import { useState } from 'react';
 import type { Timestamp } from '@/entities/time/Timestamp';
@@ -11,7 +10,6 @@ export const Game = () => {
 
   return (
     <>
-      <GameButton userBeatList={userBeatList} setUserBeatList={setUserBeatList} />
       <GameEndCalculator setGameEndTime={setGameEndTime} />
       <GameResultSender gameEndTime={gameEndTime} userBeatList={userBeatList} />
       <GameMotionCheck userBeatList={userBeatList} setUserBeatList={setUserBeatList} />
