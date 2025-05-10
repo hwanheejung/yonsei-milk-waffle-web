@@ -1,9 +1,10 @@
 import { useGetGameSuspenseQuery } from '@/entities/admin/api/queries';
 import { useGameStore } from '@/feature/game-control';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
 import { Characters } from './characters';
+import { ResultModal } from './result-modal';
 
 const AdminGame = () => {
   return (
@@ -18,6 +19,7 @@ export { AdminGame };
 const AdminGameContent = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { data: beatData } = useGetGameSuspenseQuery();
+  const [showResult, setShowResult] = useState(false);
 
   // zustand
   const isPlaying = useGameStore((s) => s.isPlaying);
@@ -27,6 +29,10 @@ const AdminGameContent = () => {
   const gameStarted = useGameStore((s) => s.gameStarted);
   const startTime = useGameStore((s) => s.startTime);
   const resetGame = useGameStore((s) => s.resetGame);
+
+  // 남은 시간 계산
+  const remainingTime = Math.max(0, Math.floor(beatData.song_length - currentTime));
+  const remainingTimeStr = String(remainingTime).padStart(2, '0');
 
   // 게임 시작 신호가 오면 오디오 재생 및 타이머 시작
   useEffect(() => {
@@ -42,6 +48,7 @@ const AdminGameContent = () => {
         setIsPlaying(false);
         setCurrentTime(0);
         resetGame();
+        setShowResult(true);
       }
     }, 100);
     return () => clearInterval(interval);
@@ -49,16 +56,27 @@ const AdminGameContent = () => {
 
   return (
     <>
-      <BeatTrack currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
+      {showResult && <ResultModal />}
+      <header className="flex items-center justify-between bg-transparent px-14">
+        <img src="/images/logo.png" alt="쉐킷투유 로고" className="w-60 object-center" />
+        <span className="text-4xl font-bold text-white">{remainingTimeStr}</span>
+      </header>
+      <div className="p-4 h-full flex flex-col">
+        <img
+          src="/images/toyou_bg.gif"
+          alt="toyou_bg"
+          className="fixed inset-0 w-full h-full object-cover opacity-80 -z-10"
+        />
 
-      <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
-
-      <Characters
-        currentTime={currentTime}
-        beatList={beatData.beat_list}
-        isPlaying={isPlaying}
-        className="mt-auto"
-      />
+        <BeatTrack currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
+        <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
+        <Characters
+          currentTime={currentTime}
+          beatList={beatData.beat_list}
+          isPlaying={isPlaying}
+          className="mt-auto"
+        />
+      </div>
     </>
   );
 };
