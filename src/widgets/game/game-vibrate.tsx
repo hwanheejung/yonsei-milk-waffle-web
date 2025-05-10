@@ -7,8 +7,8 @@ export const GameVibrate = ({
   isShacked: boolean;
   resultBeatList: number[] | null;
 }) => {
-  const PERFECT_THRESHOLD = 50; // ms
-  const GOOD_THRESHOLD = 100; // ms
+  const PERFECT_THRESHOLD = 400; // ms
+  const GOOD_THRESHOLD = 900; // ms
 
   const [signal, setSignal] = useState<'perfect' | 'good' | null>(null);
   const [isClicked, setIsClicked] = useState(false);
