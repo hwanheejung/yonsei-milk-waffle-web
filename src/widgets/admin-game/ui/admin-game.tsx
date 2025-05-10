@@ -1,9 +1,10 @@
 import { useGetGameSuspenseQuery } from '@/entities/admin/api/queries';
 import { useGameStore } from '@/feature/game-control';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
 import { Characters } from './characters';
+import { ResultModal } from './result-modal';
 
 const AdminGame = () => {
   return (
@@ -18,6 +19,7 @@ export { AdminGame };
 const AdminGameContent = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { data: beatData } = useGetGameSuspenseQuery();
+  const [showResult, setShowResult] = useState(false);
 
   // zustand
   const isPlaying = useGameStore((s) => s.isPlaying);
@@ -46,6 +48,7 @@ const AdminGameContent = () => {
         setIsPlaying(false);
         setCurrentTime(0);
         resetGame();
+        setShowResult(true);
       }
     }, 100);
     return () => clearInterval(interval);
@@ -53,6 +56,7 @@ const AdminGameContent = () => {
 
   return (
     <>
+      {showResult && <ResultModal />}
       <header className="flex items-center justify-between bg-transparent px-14">
         <img src="/images/logo.png" alt="쉐킷투유 로고" className="w-60 object-center" />
         <span className="text-4xl font-bold text-white">{remainingTimeStr}</span>
