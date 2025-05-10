@@ -7,6 +7,16 @@ import { BeatTrack } from './beat-track';
 import { Characters } from './characters';
 import { GameControls } from './game-controls';
 
+const AdminGame = () => {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AdminGameContent />
+    </Suspense>
+  );
+};
+
+export { AdminGame };
+
 const AdminGameContent = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -62,18 +72,6 @@ const AdminGameContent = () => {
   );
 };
 
-const AdminGame = () => {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-64 text-lg">
-          게임 정보를 불러오는 중...
-        </div>
-      }
-    >
-      <AdminGameContent />
-    </Suspense>
-  );
-};
-
-export { AdminGame };
+const LoadingFallback = () => (
+  <div className="flex justify-center items-center h-64 text-lg">게임 정보를 불러오는 중...</div>
+);
