@@ -2,6 +2,15 @@ import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface DeviceMotionEventConstructor {
   new (type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
@@ -24,6 +33,7 @@ export const GameMotionCheck = ({
 }) => {
   const [countNumber, setCountNumber] = useState(0);
   const [number, setNumber] = useState(0);
+  const [graphData, setGraphData] = useState<{ time: number; x: number }[]>([]);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
 
@@ -36,6 +46,7 @@ export const GameMotionCheck = ({
       const x = acceleration.x ?? 0;
 
       const threshold = 50;
+      setGraphData((prev) => [...prev, { time: currentTime, x }]);
 
       // threshold 초과시 감지 + ignore 활성화
       if (Math.abs(x) >= threshold) {
@@ -107,6 +118,17 @@ export const GameMotionCheck = ({
       >
         클릭해요
       </button>
+      <div className="w-full h-64 mt-6">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={graphData}>
+            <CartesianGrid stroke="#ccc" />
+            <XAxis dataKey="time" unit="ms" />
+            <YAxis domain={['auto', 'auto']} />
+            <Tooltip />
+            <Line type="monotone" dataKey="x" stroke="#ff7300" dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
