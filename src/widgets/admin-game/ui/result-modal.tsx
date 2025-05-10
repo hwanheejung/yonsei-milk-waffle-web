@@ -1,28 +1,11 @@
+import { useGetGameResultSuspenseQuery } from '@/entities/admin';
 import { TEAM_INFO, type Team } from '@/entities/team';
-import { useEffect, useState } from 'react';
+import type { AdminGameResultResponseDto } from '@/shared/api/dto';
+import { Suspense, useEffect, useState } from 'react';
 import { useCounter } from '../hooks/use-result';
 import { fireConfetti } from '../utils/confetti';
 
-type TeamScore = {
-  team: string;
-  score: number;
-};
-
-type ResultData = {
-  scores: TeamScore[];
-};
-
-const dummyData: ResultData = {
-  scores: [
-    { team: 'SEOUL', score: 130 },
-    { team: 'KOREA', score: 100 },
-    { team: 'YONSEI', score: 120 },
-    { team: 'KAIST', score: 110 },
-  ],
-};
-
 const ResultModal = () => {
-  const [resultData] = useState<ResultData>(dummyData);
   const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
@@ -37,13 +20,34 @@ const ResultModal = () => {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="flex flex-col justify-between p-8 w-full h-[60%] text-center bg-[url('/images/result-background.png')] bg-cover bg-center">
         <h2 className="text-2xl font-bold mb-10 text-white">게임 종료!</h2>
-        {showResult ? <ResultGraph resultData={resultData} /> : <Countdown />}
+        {showResult ? (
+          <Suspense fallback={<LoadingFallback />}>
+            <ResultContent />
+          </Suspense>
+        ) : (
+          <Countdown />
+        )}
       </div>
     </div>
   );
 };
 
-const ResultGraph = ({ resultData }: { resultData: ResultData }) => {
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center h-full">
+    <div className="text-white text-2xl">결과 불러오는 중...</div>
+  </div>
+);
+
+const ResultContent = () => {
+  const { data: gameResult } = useGetGameResultSuspenseQuery();
+  return <ResultGraph resultData={gameResult} />;
+};
+
+const ResultGraph = ({
+  resultData,
+}: {
+  resultData: AdminGameResultResponseDto;
+}) => {
   const [currentLevel, setCurrentLevel] = useState(-1);
   const [showConfetti, setShowConfetti] = useState(false);
   const maxScore = Math.max(...resultData.scores.map((s) => s.score));

@@ -1,5 +1,6 @@
 import type {
   AdminGameResponseDto,
+  AdminGameResultResponseDto,
   AdminGameStartRequestDto,
   AdminGameStartResponseDto,
 } from '@/shared/api/dto';
@@ -33,6 +34,18 @@ export class AdminApi {
         ...options,
       })
       .json<AdminGameStartResponseDto>();
+
+    return response;
+  }
+
+  async getGameResult(kyInstance?: KyInstance, options?: Options) {
+    const instance = kyInstance ?? this.instance;
+
+    const response = await instance
+      .get<AdminGameResultResponseDto>('api/admin/game/result', {
+        ...options,
+      })
+      .json();
 
     return response;
   }
