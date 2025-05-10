@@ -10,7 +10,7 @@ type TProps = {
 
 const Characters = ({ currentTime, beatList, isPlaying, className }: TProps) => {
   return (
-    <div className={cn('flex justify-between gap-20 max-w-[800px] mx-auto', className)}>
+    <div className={cn('flex justify-between items-end gap-20 max-w-[800px] mx-auto', className)}>
       <Seorini currentTime={currentTime} beatList={beatList} isPlaying={isPlaying} />
       <Nupjugi currentTime={currentTime} beatList={beatList} isPlaying={isPlaying} />
       <Yonsuri currentTime={currentTime} beatList={beatList} isPlaying={isPlaying} />
@@ -59,9 +59,9 @@ const Seorini = ({ currentTime, beatList, isPlaying }: TCharacterProps) => (
       <img
         src="/images/character-seoul.png"
         alt="Seoul University Character"
-        className="w-[200px] h-[200px] object-contain"
+        className="w-[220px] h-[220px] object-contain"
       />
-      <div className="absolute -top-1 left-1/2 -translate-x-1/2">
+      <div className="absolute top-5 left-1/2 -translate-x-1/2">
         <CheerleadingStick currentTime={currentTime} beatList={beatList} isPlaying={isPlaying} />
       </div>
     </div>
