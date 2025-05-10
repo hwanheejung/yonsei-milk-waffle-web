@@ -15,25 +15,21 @@ export const GameVibrate = ({
   useEffect(() => {
     if (!isShacked || !resultBeatList?.length) return;
 
-    const handleUserAction = () => {
-      const now = Date.now();
-      const minDiff = Math.min(...resultBeatList.map((t) => Math.abs(now - t)));
+    const now = Date.now();
+    const minDiff = Math.min(...resultBeatList.map((t) => Math.abs(now - t)));
 
-      if ('vibrate' in navigator) {
-        if (minDiff <= PERFECT_THRESHOLD) {
-          navigator.vibrate([100, 50, 100]);
-          setSignal('perfect');
-        } else if (minDiff <= GOOD_THRESHOLD) {
-          navigator.vibrate(100);
-          setSignal('good');
-        }
+    if ('vibrate' in navigator) {
+      if (minDiff <= PERFECT_THRESHOLD) {
+        navigator.vibrate([100, 50, 100]);
+        setSignal('perfect');
+      } else if (minDiff <= GOOD_THRESHOLD) {
+        navigator.vibrate(100);
+        setSignal('good');
       }
+    }
 
-      window.removeEventListener('touchstart', handleUserAction); // 한번만 실행
-    };
-
-    window.addEventListener('touchstart', handleUserAction);
-    return () => window.removeEventListener('touchstart', handleUserAction);
+    const timer = setTimeout(() => setSignal(null), 800);
+    return () => clearTimeout(timer);
   }, [isShacked, resultBeatList]);
 
   return (
