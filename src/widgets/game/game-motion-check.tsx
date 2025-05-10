@@ -1,5 +1,5 @@
 import { getCurrentUnixTime } from '@/shared/lib/date';
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 import type { Dispatch } from 'react';
 import { cn } from '@/shared/lib/utils';
 
@@ -26,6 +26,7 @@ export const GameMotionCheck = ({
   isShacked: boolean;
   setIsShacked: (input: boolean) => void;
 }) => {
+  const [isClicked, setIsClicked] = useState(false);
   const startTime = useRef<number | null>(null);
   const userMovements = useRef<number[]>([]);
   const isIgnore = useRef(false);
@@ -114,8 +115,12 @@ export const GameMotionCheck = ({
         </div>
         <button
           type="button"
-          onClick={checkSensorPermission}
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg w-[267px] font-medium"
+          onClick={() => {
+            checkSensorPermission();
+            setIsClicked(true);
+          }}
+          disabled={isClicked}
+          className="bg-blue-500 text-white px-6 py-3 rounded-lg w-[267px] font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           센서 이용 허가하기
         </button>

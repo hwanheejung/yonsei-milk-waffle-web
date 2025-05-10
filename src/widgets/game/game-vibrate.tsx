@@ -11,6 +11,7 @@ export const GameVibrate = ({
   const GOOD_THRESHOLD = 1500; // ms
 
   const [signal, setSignal] = useState<'perfect' | 'good' | null>(null);
+  const [isClicked, setIsClicked] = useState(false);
   const vibrateButtonRef = useRef<HTMLButtonElement>(null);
   const goodVibrateButtonRef = useRef<HTMLButtonElement>(null);
   const perfectVibrateButtonRef = useRef<HTMLButtonElement>(null);
@@ -53,8 +54,12 @@ export const GameVibrate = ({
         <button
           ref={vibrateButtonRef}
           type="button"
-          onClick={() => navigator.vibrate(300)}
-          className="w-full bg-blue-800 text-white py-3 rounded-lg"
+          onClick={() => {
+            setIsClicked(true);
+            navigator.vibrate(300);
+          }}
+          disabled={isClicked}
+          className="w-full bg-blue-800 text-white py-3 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           진동 모드 사용하기
         </button>
