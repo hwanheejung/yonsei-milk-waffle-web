@@ -32,3 +32,12 @@ export type ReadGameStatusResponseDto = {
 export type CreateSelectTeamRequestDto = {
   team: Team;
 };
+
+export type AdminGameResultResponseDto = {
+  scores: TeamResponseDto[];
+};
+
+type TeamResponseDto = {
+  team: Team;
+  score: number;
+};
