@@ -39,13 +39,18 @@ export const GameVibrate = ({
   }, [isShacked, resultBeatList]);
 
   return (
-    <div className="absolute top-1/3 w-full flex justify-center z-50 pointer-events-none">
-      {signal === 'perfect' && (
-        <div className="text-3xl font-bold text-green-500 animate-bounce">PERFECT!</div>
-      )}
-      {signal === 'good' && (
-        <div className="text-3xl font-bold text-yellow-500 animate-bounce">GOOD!</div>
-      )}
-    </div>
+    <>
+      <div className="absolute top-1/3 w-full flex justify-center z-50 pointer-events-none">
+        {signal === 'perfect' && (
+          <div className="text-3xl font-bold text-green-500 animate-bounce">PERFECT!</div>
+        )}
+        {signal === 'good' && (
+          <div className="text-3xl font-bold text-yellow-500 animate-bounce">GOOD!</div>
+        )}
+      </div>
+      <button type="button" onClick={() => navigator.vibrate(100)}>
+        진동 테스트
+      </button>
+    </>
   );
 };
