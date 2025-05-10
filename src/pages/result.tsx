@@ -18,8 +18,10 @@ function RouteComponent() {
   const data = getStorage({ key: 'BEAT_LIST' });
 
   return (
-    <div className="min-h-screen w-full gap-8 flex flex-col justify-center items-center px-4 py-6 bg-white">
-      <h1 className="text-xl font-bold mb-4 text-center">당신은 얼마나 열심히 응원했나요?</h1>
+    <div className="min-h-screen w-full gap-8 flex flex-col justify-center items-center px-4 py-6 bg-white bg-[url('/images/result_bg.png')] bg-no-repeat bg-top bg-cover">
+      <h1 className="text-xl text-white font-semibold mb-4 text-center">
+        당신은 얼마나 열심히 응원했나요?
+      </h1>
 
       {data !== null && data.length > 0 ? (
         <div className="w-full max-w-md h-64 pr-10">
