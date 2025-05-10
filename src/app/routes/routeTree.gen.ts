@@ -11,14 +11,42 @@
 // Import Routes
 
 import { Route as rootRoute } from './../../pages/__root'
+import { Route as SelectTeamImport } from './../../pages/select-team'
+import { Route as GameImport } from './../../pages/game'
+import { Route as AdminImport } from './../../pages/admin'
 import { Route as IndexImport } from './../../pages/index'
+import { Route as AdminResultImport } from './../../pages/admin.result'
 
 // Create/Update Routes
+
+const SelectTeamRoute = SelectTeamImport.update({
+  id: '/select-team',
+  path: '/select-team',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GameRoute = GameImport.update({
+  id: '/game',
+  path: '/game',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminRoute = AdminImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AdminResultRoute = AdminResultImport.update({
+  id: '/result',
+  path: '/result',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -32,39 +60,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameImport
+      parentRoute: typeof rootRoute
+    }
+    '/select-team': {
+      id: '/select-team'
+      path: '/select-team'
+      fullPath: '/select-team'
+      preLoaderRoute: typeof SelectTeamImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/result': {
+      id: '/admin/result'
+      path: '/result'
+      fullPath: '/admin/result'
+      preLoaderRoute: typeof AdminResultImport
+      parentRoute: typeof AdminImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AdminRouteChildren {
+  AdminResultRoute: typeof AdminResultRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminResultRoute: AdminResultRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/game': typeof GameRoute
+  '/select-team': typeof SelectTeamRoute
+  '/admin/result': typeof AdminResultRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/game': typeof GameRoute
+  '/select-team': typeof SelectTeamRoute
+  '/admin/result': typeof AdminResultRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/game': typeof GameRoute
+  '/select-team': typeof SelectTeamRoute
+  '/admin/result': typeof AdminResultRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/admin' | '/game' | '/select-team' | '/admin/result'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/admin' | '/game' | '/select-team' | '/admin/result'
+  id: '__root__' | '/' | '/admin' | '/game' | '/select-team' | '/admin/result'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  GameRoute: typeof GameRoute
+  SelectTeamRoute: typeof SelectTeamRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  GameRoute: GameRoute,
+  SelectTeamRoute: SelectTeamRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +161,30 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/admin",
+        "/game",
+        "/select-team"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/admin": {
+      "filePath": "admin.tsx",
+      "children": [
+        "/admin/result"
+      ]
+    },
+    "/game": {
+      "filePath": "game.tsx"
+    },
+    "/select-team": {
+      "filePath": "select-team.tsx"
+    },
+    "/admin/result": {
+      "filePath": "admin.result.tsx",
+      "parent": "/admin"
     }
   }
 }

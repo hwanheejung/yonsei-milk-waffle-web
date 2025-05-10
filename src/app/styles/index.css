@@ -10,7 +10,7 @@
   --card-foreground: var(--color-foreground);
   --popover: var(--color-background);
   --popover-foreground: var(--color-foreground);
-  --primary: var(--color-accent-blue-600);
+  --primary: var(--color-accent-teal-700);
   --primary-foreground: var(--color-white);
   --secondary: var(--color-cool-gray-100);
   --secondary-foreground: var(--color-cool-gray-1400);
