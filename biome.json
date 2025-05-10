@@ -27,6 +27,9 @@
       "recommended": true,
       "style": {
         "noUnusedTemplateLiteral": "off"
+      },
+      "a11y": {
+        "useMediaCaption": "off"
       }
     },
     "ignore": ["dist", ".vite/**", ".yarn/**", "**/*.d.ts", "node_modules/**", "./src/app/routes/routeTree.gen.ts", "src/app/routes/*.tsx"]
@@ -296,7 +299,10 @@
       },
       "linter": {
         "rules": {
-          "a11y": { "useKeyWithClickEvents": "off" },
+          "a11y": {
+            "useKeyWithClickEvents": "off",
+            "useMediaCaption": "off"
+          },
           "complexity": { "noVoid": "off" },
           "correctness": {
             "noInvalidUseBeforeDeclaration": "off",
