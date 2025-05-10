@@ -31,18 +31,24 @@ const Metronome = ({ currentTime, beatList, isPlaying }: TProps) => {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative h-32 w-32">
+        {/* Left cheer stick */}
         <div
           className={cn(
-            'absolute left-1/2 top-0 h-24 w-1 -translate-x-1/2 origin-bottom bg-blue-500 transition-transform duration-100',
+            'absolute left-[calc(50%-15px)] top-0 h-24 w-3 -translate-x-1/2 origin-bottom transition-transform duration-100 rounded-xl',
+            'bg-gradient-to-b from-blue-400 to-blue-600',
+            'shadow-[0_0_10px_rgba(59,130,246,0.5)]',
             !isPlaying && 'opacity-50'
           )}
           style={{
             transform: `rotate(${getSwingAngle()}deg)`,
           }}
         />
+        {/* Right cheer stick */}
         <div
           className={cn(
-            'absolute left-1/2 top-0 h-24 w-1 -translate-x-1/2 origin-bottom bg-blue-500 transition-transform duration-100',
+            'absolute left-[calc(50%+15px)] top-0 h-24 w-3 -translate-x-1/2 origin-bottom transition-transform duration-100 rounded-xl',
+            'bg-gradient-to-b from-pink-400 to-pink-600',
+            'shadow-[0_0_10px_rgba(236,72,153,0.5)]',
             !isPlaying && 'opacity-50'
           )}
           style={{
