@@ -1,11 +1,9 @@
-import { useStartGameMutation } from '@/entities/admin/api/mutations';
 import { useGetGameSuspenseQuery } from '@/entities/admin/api/queries';
 import { useGameStore } from '@/feature/game-control';
 import { Suspense, useEffect, useRef } from 'react';
 import { AudioPlayer } from './audio-player';
 import { BeatTrack } from './beat-track';
 import { Characters } from './characters';
-import { GameControls } from './game-controls';
 
 const AdminGame = () => {
   return (
@@ -19,53 +17,38 @@ export { AdminGame };
 
 const AdminGameContent = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const startTimeRef = useRef<number>(0);
-
   const { data: beatData } = useGetGameSuspenseQuery();
-  const { mutateAsync: startGame } = useStartGameMutation();
 
-  const {
-    isPlaying,
-    currentTime,
-    setIsPlaying,
-    setCurrentTime,
-    startGame: startGameState,
-    resetGame,
-  } = useGameStore();
+  // zustand
+  const isPlaying = useGameStore((s) => s.isPlaying);
+  const setIsPlaying = useGameStore((s) => s.setIsPlaying);
+  const currentTime = useGameStore((s) => s.currentTime);
+  const setCurrentTime = useGameStore((s) => s.setCurrentTime);
+  const gameStarted = useGameStore((s) => s.gameStarted);
+  const startTime = useGameStore((s) => s.startTime);
+  const resetGame = useGameStore((s) => s.resetGame);
 
-  const handleStartGame = async () => {
-    if (!audioRef.current || !beatData) return;
-    await startGame({ game_started_at: Date.now() });
-    startTimeRef.current = Date.now();
-    audioRef.current.play();
-    startGameState();
-  };
-
+  // 게임 시작 신호가 오면 오디오 재생 및 타이머 시작
   useEffect(() => {
-    if (!isPlaying || !beatData) return;
+    if (!gameStarted || !audioRef.current || !startTime || !beatData) return;
+    audioRef.current.currentTime = 0;
+    audioRef.current.play();
+    setIsPlaying(true);
     const interval = setInterval(() => {
-      if (audioRef.current) {
-        const now = (Date.now() - startTimeRef.current) / 1000;
-        setCurrentTime(now);
-        if (now >= beatData.song_length) {
-          audioRef.current.pause();
-          setIsPlaying(false);
-          setCurrentTime(0);
-          resetGame();
-        }
+      const now = (Date.now() - startTime) / 1000;
+      setCurrentTime(now);
+      if (now >= beatData.song_length) {
+        audioRef.current?.pause();
+        setIsPlaying(false);
+        setCurrentTime(0);
+        resetGame();
       }
     }, 100);
     return () => clearInterval(interval);
-  }, [isPlaying, beatData, setCurrentTime, setIsPlaying, resetGame]);
+  }, [gameStarted, startTime, beatData, setIsPlaying, setCurrentTime, resetGame]);
 
   return (
     <>
-      <GameControls
-        isPlaying={isPlaying}
-        onStart={handleStartGame}
-        remainingTime={beatData.song_length - currentTime}
-      />
-
       <BeatTrack currentTime={currentTime} beatList={beatData.beat_list} isPlaying={isPlaying} />
 
       <AudioPlayer audioRef={audioRef} onEnded={() => setIsPlaying(false)} />
