@@ -16,6 +16,7 @@ import { Route as GameImport } from "./../../pages/game";
 import { Route as AdminImport } from "./../../pages/admin";
 import { Route as IndexImport } from "./../../pages/index";
 
+
 // Create/Update Routes
 
 const SelectTeamRoute = SelectTeamImport.update({
@@ -23,6 +24,12 @@ const SelectTeamRoute = SelectTeamImport.update({
   path: "/select-team",
   getParentRoute: () => rootRoute,
 } as any);
+
+const ResultRoute = ResultImport.update({
+  id: '/result',
+  path: '/result',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const GameRoute = GameImport.update({
   id: "/game",
@@ -121,6 +128,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   GameRoute: GameRoute,
+  ResultRoute: ResultRoute,
   SelectTeamRoute: SelectTeamRoute,
 };
 
@@ -137,6 +145,7 @@ export const routeTree = rootRoute
         "/",
         "/admin",
         "/game",
+        "/result",
         "/select-team"
       ]
     },
@@ -148,6 +157,9 @@ export const routeTree = rootRoute
     },
     "/game": {
       "filePath": "game.tsx"
+    },
+    "/result": {
+      "filePath": "result.tsx"
     },
     "/select-team": {
       "filePath": "select-team.tsx"
