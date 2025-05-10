@@ -1,13 +1,19 @@
+import { useStartGameMutation } from '@/entities/admin';
 import { TEAM_INFO } from '@/entities/team';
+import { useGameStore } from '@/feature/game-control';
 import { Button } from '@/shared/ui';
 import { useState } from 'react';
 
 const AdminReady = () => {
   const [isExiting, setIsExiting] = useState(false);
   const [hide, setHide] = useState(false);
+  const startGameState = useGameStore((s) => s.startGame);
+  const { mutateAsync: startGame } = useStartGameMutation();
 
-  const handleStart = () => {
+  const handleStart = async () => {
     setIsExiting(true);
+    await startGame({ game_started_at: Date.now() });
+    startGameState(Date.now());
     setTimeout(() => setHide(true), 900);
   };
 
