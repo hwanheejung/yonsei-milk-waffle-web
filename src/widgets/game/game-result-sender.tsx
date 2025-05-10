@@ -1,7 +1,8 @@
 import { usePostGameMutation } from '@/entities/game/api/mutations';
+import { Team } from '@/entities/team';
 import type { Timestamp } from '@/entities/time/Timestamp';
 import { getCurrentUnixTime } from '@/shared/lib/date';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const GameResultSender = ({
   gameEndTime,
@@ -23,7 +24,7 @@ export const GameResultSender = ({
       const now = getCurrentUnixTime();
       if (!hasSentResult.current && now > gameEndTime) {
         sendGameResult({
-          body: { timestamp: userBeatList, team: 'KOREA' },
+          body: { timestamp: userBeatList, team: Team.KOREA },
         })
           .then(() => {})
           .catch((err) => {

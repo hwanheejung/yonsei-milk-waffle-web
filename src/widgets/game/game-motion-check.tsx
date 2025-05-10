@@ -2,13 +2,13 @@ import type { Timestamp } from '@/entities/time/Timestamp';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Dispatch } from 'react';
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
 } from 'recharts';
 
 interface DeviceMotionEventConstructor {
