@@ -1,9 +1,12 @@
 import { cn } from '@/shared/lib/utils';
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui';
+import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
 const TeamSelectForm = () => {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(TEAMS[0].name);
+
+  const router = useRouter();
 
   return (
     <Card className="max-w-96">
@@ -27,8 +30,8 @@ const TeamSelectForm = () => {
           variant="default"
           disabled={!selectedTeam}
           onClick={() => {
-            // TODO: 게임 시작 로직
-            console.log('Selected team:', selectedTeam);
+            // TODO: zustand 에 selectedTeam 저장
+            router.navigate({ to: '/game' });
           }}
         >
           시작하기!
