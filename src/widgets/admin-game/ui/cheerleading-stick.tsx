@@ -8,7 +8,7 @@ const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
   useEffect(() => {
     if (!isPlaying) return;
 
-    const currentBeat = beatList.findIndex((beat) => beat > currentTime);
+    const currentBeat = beatList.findIndex((beat) => beat / 1000 > currentTime);
     if (currentBeat !== -1) {
       setCurrentBeatIndex(currentBeat);
     }
@@ -17,8 +17,8 @@ const CheerleadingStick = ({ currentTime, beatList, isPlaying }: TProps) => {
   const getSwingAngle = () => {
     if (!isPlaying || currentBeatIndex >= beatList.length) return 0;
 
-    const currentBeat = beatList[currentBeatIndex];
-    const prevBeat = currentBeatIndex > 0 ? beatList[currentBeatIndex - 1] : 0;
+    const currentBeat = beatList[currentBeatIndex] / 1000;
+    const prevBeat = currentBeatIndex > 0 ? beatList[currentBeatIndex - 1] / 1000 : 0;
     const beatInterval = currentBeat - prevBeat;
     const timeInCurrentBeat = currentTime - prevBeat;
     const progress = timeInCurrentBeat / beatInterval;
