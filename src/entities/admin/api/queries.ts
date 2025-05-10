@@ -1,5 +1,10 @@
 import type { AdminGameResponseDto } from '@/shared/api/dto';
-import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import {
+  type DefaultError,
+  type UseQueryOptions,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { adminApi } from './instance';
 
 export const ADMIN_QUERY_KEY = {
@@ -23,5 +28,11 @@ export const useGetGameQuery = <TData = AdminGameResponseDto>(
   return useQuery({
     ...queries.getGame(),
     ...options,
+  });
+};
+
+export const useGetGameSuspenseQuery = () => {
+  return useSuspenseQuery({
+    ...queries.getGame(),
   });
 };
