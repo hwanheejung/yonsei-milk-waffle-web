@@ -98,7 +98,7 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
 
   return (
     <ConfettiContext.Provider value={api}>
-      <canvas ref={canvasRef} {...rest} />
+      <canvas ref={canvasRef} {...rest} className="!z-50" />
       {children}
     </ConfettiContext.Provider>
   );

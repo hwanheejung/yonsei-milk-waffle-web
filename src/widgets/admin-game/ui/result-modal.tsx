@@ -43,8 +43,6 @@ const ResultModal = () => {
   );
 };
 
-export { ResultModal };
-
 const ResultGraph = ({ resultData }: { resultData: ResultData }) => {
   const [currentLevel, setCurrentLevel] = useState(-1);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -55,7 +53,6 @@ const ResultGraph = ({ resultData }: { resultData: ResultData }) => {
     ...Array.from(new Set(resultData.scores.map((s) => s.score))).sort((a, b) => a - b),
   ];
 
-  // 각 팀의 현재 점수에 대한 카운터
   const seoulCounter = useCounter(
     Math.min(resultData.scores[0].score, scoreLevels[currentLevel]),
     1000
@@ -79,14 +76,12 @@ const ResultGraph = ({ resultData }: { resultData: ResultData }) => {
         setCurrentLevel(i);
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
-      // 애니메이션이 끝나면 confetti 표시
       setShowConfetti(true);
       fireConfetti();
     };
     animate();
   }, [scoreLevels.length]);
 
-  // 1등 팀 찾기
   const winner = resultData.scores.reduce((prev, current) =>
     current.score > prev.score ? current : prev
   );
@@ -150,3 +145,5 @@ const Countdown = () => {
     </div>
   );
 };
+
+export { ResultModal };
