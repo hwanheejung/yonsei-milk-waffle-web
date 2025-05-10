@@ -1,4 +1,4 @@
-# 인터랙티브 리듬 응원 게임 [쉐낏투유](shakeit-toyou.vercel.app/)
+# 인터랙티브 리듬 응원 게임 [쉐낏투유](https://shakeit-toyou.vercel.app/select-team)
 ![logo2](https://github.com/user-attachments/assets/29917572-f0fe-4aae-a3f4-bc021120ae02)
 
 ## 🎯 프로젝트 기획 의도 및 목표
